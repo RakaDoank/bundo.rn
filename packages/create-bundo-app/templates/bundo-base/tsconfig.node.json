@@ -1,0 +1,10 @@
+{
+  "extends": "$$tsconfig.base.node.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "./bundo.config.{js,mjs,ts,mts}",
+    "./metro.config.js"
+  ]
+}

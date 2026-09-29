@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.base.node.json",
+	"compilerOptions": {
+		"composite": true
+	},
+	"include": [
+		"./lint-staged.config.mjs",
+		"./scripts/**/*"
+	]
+}

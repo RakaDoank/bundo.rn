@@ -1,0 +1,15 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"composite": true,
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"types": [
+			"node"
+		]
+	},
+	"include": [
+		"./bundo.config.mts",
+		"./react-native.config.js"
+	]
+}

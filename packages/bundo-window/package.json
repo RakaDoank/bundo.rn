@@ -1,0 +1,46 @@
+{
+	"name": "bundo-window",
+	"version": "0.0.1-beta.1",
+	"description": "Manage your React Native app window",
+	"license": "MIT",
+	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
+	"homepage": "https://github.com/RakaDoank/bundo.rn",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/RakaDoank/bundo.rn.git",
+		"directory": "packages/bundo-window"
+	},
+	"scripts": {
+		"build": "bun ./_scripts/build.mts"
+	},
+	"files": [
+		"android",
+		"apple",
+		"lib",
+		"src",
+		"*.podspec",
+		"bundo.plugin.mjs",
+		"react-native.config.js",
+		"!*.tsbuildinfo",
+		"!android/build",
+		"!android/gradle",
+		"!android/gradlew",
+		"!android/gradlew.bat",
+		"!android/local.properties",
+		"!ios/build"
+	],
+	"main": "./lib/commonjs/index.js",
+	"types": "./lib/typescript/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/module/index.js",
+			"require": "./lib/commonjs/index.js",
+			"types": "./lib/typescript/index.d.ts"
+		}
+	},
+	"codegenConfig": {
+		"name": "BundoWindowSpecs",
+		"type": "modules",
+		"jsSrcsDir": "./src/_internal/native-modules"
+	}
+}

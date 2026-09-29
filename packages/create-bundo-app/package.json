@@ -1,0 +1,21 @@
+{
+	"name": "create-bundo-app",
+	"version": "0.0.1-beta.1",
+	"description": "Create Bundo app",
+	"license": "MIT",
+	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
+	"homepage": "https://github.com/RakaDoank/bundo.rn",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/RakaDoank/bundo.rn.git",
+		"directory": "packages/create-bundo-app"
+	},
+	"scripts": {
+		"build": "bun ./_scripts/build.mts"
+	},
+	"files": [
+		"lib",
+		"templates"
+	],
+	"bin": "./lib/bin.mjs"
+}

@@ -1,0 +1,11 @@
+{
+	"files": [],
+	"references": [
+		{ "path": "./packages/bundo-appgen" },
+		{ "path": "./packages/bundo-window" },
+		{ "path": "./packages/bundo.rn" },
+		{ "path": "./packages/create-bundo-app" },
+		{ "path": "./playground/hello-bundo" },
+		{ "path": "./tsconfig.node.json" }
+	]
+}

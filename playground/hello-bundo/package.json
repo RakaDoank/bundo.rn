@@ -1,0 +1,30 @@
+{
+	"name": "@playground/hello-bundo",
+	"private": true,
+	"version": "0.0.0",
+	"scripts": {
+		"appgen": "bundo appgen",
+		"appgen:bun": "bunx --bun bundo appgen",
+    	"macos": "react-native run-macos",
+		"start": "react-native start"
+	},
+	"dependencies": {
+		"@audira/carbon-react-native": "1.0.10",
+		"@audira/carbon-react-native-elements": "1.0.1",
+		"@carbon/icons": "11.89.0",
+		"@react-native/new-app-screen": "0.81.6",
+		"bundo-window": "workspace:*",
+		"bundo.rn": "workspace:*",
+		"react": "19.1.4",
+		"react-native": "0.81.6",
+		"react-native-macos": "0.81.9",
+		"react-native-safe-area-context": "5.10.0"
+	},
+	"devDependencies": {
+		"@react-native/babel-preset": "0.81.6",
+		"@react-native/metro-config": "0.81.6",
+		"@rnx-kit/metro-config": "catalog:",
+		"@rnx-kit/metro-resolver-symlinks": "catalog:",
+		"react-native-svg-transformer": "1.5.3"
+	}
+}

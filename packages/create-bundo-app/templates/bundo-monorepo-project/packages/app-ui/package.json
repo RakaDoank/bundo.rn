@@ -1,0 +1,23 @@
+{
+  "name": "app-ui",
+  "version": "0.0.1",
+  "description": "Shared UI for multiple React Native apps.",
+  "scripts": {
+    "type-check": "tsc --build tsconfig.json"
+  },
+  "files": [
+    "src"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./screens": "./src/screens/index.ts"
+  },
+  "peerDependencies": {
+    "react": "^19",
+    "react-native": ">=0.81",
+    "react-native-safe-area-context": "^5"
+  },
+  "dependencies": {
+    "@react-native/new-app-screen": "0.81.6"
+  }
+}

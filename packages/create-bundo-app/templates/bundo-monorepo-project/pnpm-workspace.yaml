@@ -1,0 +1,11 @@
+catalog:
+  - '@rnx-kit/metro-config': 2.2.5
+  - '@rnx-kit/metro-resolver-symlinks': 0.3.2
+
+engineStrict: true
+
+nodeLinker: hoisted
+
+packages:
+  - apps/*
+  - packages/*

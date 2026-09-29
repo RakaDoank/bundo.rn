@@ -1,0 +1,51 @@
+{
+	"name": "bundo-appgen",
+	"version": "0.0.1-beta.1",
+	"description": "App generator CLI for React Native macOS and Windows",
+	"license": "MIT",
+	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
+	"homepage": "https://github.com/RakaDoank/bundo.rn",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/RakaDoank/bundo.rn.git",
+		"directory": "packages/bundo-appgen"
+	},
+	"scripts": {
+		"build": "bun ./_scripts/build.mts",
+		"build-types": "bunx tsc --project ./tsconfig.build-types.json"
+	},
+	"bin": "./bin.mjs",
+	"types": "./lib/typescript/index.d.mts",
+	"files": [
+		"bin.mjs",
+		"lib",
+		"src",
+		"!*.tsbuildinfo"
+	],
+	"exports": {
+		".": {
+			"import": "./lib/module/index.js",
+			"require": "./lib/commonjs/index.js",
+			"types": "./lib/typescript/index.d.mts"
+		},
+		"./bin.mjs": {
+			"node": "./bin.mjs"
+		}
+	},
+	"peerDependencies": {
+		"react-native-macos": "^0.81"
+	},
+	"devDependencies": {
+		"@types/semver": "^7",
+		"semver": "^7",
+		"typescript": ">=6 <=7",
+		"yargs": "catalog:"
+	},
+	"optionalDependencies": {
+		"tsx": "^4"
+	},
+	"engines": {
+		"bun": "^1",
+		"node": ">=24"
+	}
+}

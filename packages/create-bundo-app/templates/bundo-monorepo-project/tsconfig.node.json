@@ -1,0 +1,9 @@
+{
+	"extends": "./tsconfig.base.node.json",
+	"compilerOptions": {
+		"composite": true
+	},
+	"include": [
+		"./scripts/**/*"
+	]
+}

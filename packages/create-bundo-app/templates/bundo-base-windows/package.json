@@ -1,0 +1,30 @@
+{
+  "name": "windows-app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt est in quam dapibus, at tincidunt dui pharetra.",
+  "scripts": {
+    "appgen": "bundo.rn appgen",
+		"start": "react-native start",
+    "windows": "react-native run-windows"
+  },
+  "dependencies": {
+    "bundo.rn": "$$",
+    "react": "19.2.8",
+    "react-native": "0.84.1",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-windows": "0.84.0"
+  },
+  "devDependencies": {
+    "@react-native/babel-preset": "0.84.1",
+    "@react-native/metro-config": "0.84.1",
+		"@rnx-kit/metro-config": "catalog:",
+		"@rnx-kit/metro-resolver-symlinks": "catalog:",
+    "@types/react": "^19"
+  },
+  "engines": {
+    "bun": ">=1.4.x",
+    "node": ">=22",
+    "pnpm": ">=11"
+  }
+}

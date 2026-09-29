@@ -1,0 +1,13 @@
+{
+	"extends": "../../tsconfig.base.react-native.json",
+	"compilerOptions": {
+		"composite": true,
+		"rootDir": "./src",
+		"customConditions": [
+			"react-native"
+		]
+	},
+	"include": [
+		"./src/**/*"
+	]
+}

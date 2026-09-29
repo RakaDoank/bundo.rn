@@ -1,0 +1,54 @@
+{
+	"name": "bundo.rn",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Let's bundo manages your React Native app for macOS and Windows",
+	"scripts": {
+		"code-check": "npm run type-check && npm run lint",
+		"lint": "eslint",
+		"prepare": "husky",
+		"type-check": "tsc --build"
+	},
+	"workspaces": {
+		"catalog": {
+			"@rnx-kit/metro-config": "2.2.5",
+			"@rnx-kit/metro-resolver-symlinks": "0.3.2",
+			"yargs": "^18",
+			"zod": "^4"
+		},
+		"packages": [
+			"packages/*",
+			"playground/*"
+		]
+	},
+	"devDependencies": {
+		"@eslint/compat": "2.1.1",
+		"@eslint/js": "10.0.1",
+		"@inquirer/prompts": "8.7.2",
+		"@react-native/eslint-config": "0.85.3",
+		"@stylistic/eslint-plugin": "5.10.0",
+		"@types/bun": "^1",
+		"@types/node": "^24",
+		"@types/react": "19.3.0",
+		"@types/yargs": "17.0.35",
+		"bundo-appgen": "workspace:*",
+		"create-bundo-app": "workspace:*",
+		"eslint": "10.11.0",
+		"eslint-import-resolver-typescript": "4.4.5",
+		"eslint-plugin-import-x": "4.17.1",
+		"eslint-plugin-react": "7.37.5",
+		"eslint-plugin-react-hooks": "7.1.1",
+		"eslint-plugin-react-native": "^5.0.0",
+		"globals": "17.12.0",
+		"husky": "9.1.7",
+		"lint-staged": "17.6.0",
+		"react-native-builder-bob": "0.43.1",
+		"tsx": "4.23.15",
+		"typescript": "6.0.3",
+		"typescript-eslint": "8.70.1"
+	},
+	"engines": {
+		"bun": "^1.4.x",
+		"node": ">=24"
+	}
+}
