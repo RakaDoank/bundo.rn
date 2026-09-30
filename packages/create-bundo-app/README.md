@@ -42,38 +42,30 @@ You will be asked for some options that required for the command logic to create
 
 > This section is assuming that you are using Bun
 
-Install JavaScript dependencies
+1. Install JavaScript dependencies
+    ```bash
+    bun install
+    ```
 
-```bash
-bun install
-```
+2. Go to /apps/macos-app directory, and generate your native project with command
+    ```bash
+    bun run appgen
+    ```
 
----
+3. Then, you can run the Metro server
+    ```bash
+    bun run start
+    ```
 
-Go the /apps/macos-app directory.
+4. Finally, run your app with Xcode.
 
-Generate your native project with command
+    You can also run your app with command
 
-```bash
-bun run appgen
-```
+    ```bash
+    bunx react-native run-macos --scheme HelloWorld
+    ```
 
-Then, you can run the Metro server
-
-```bash
-bun run start
-```
-
-Finally, run your app with Xcode.
-
----
-
-You can also run your app with command
-```bash
-bunx react-native run-macos --scheme HelloWorld
-```
-
-The target name ("HelloWorld") is the .xcworkspace folder name without the .xcworkspace in the /macos directory.
+    The target name ("HelloWorld") is the .xcworkspace folder name without the .xcworkspace in the /macos directory.
 
 ## Caveat
 

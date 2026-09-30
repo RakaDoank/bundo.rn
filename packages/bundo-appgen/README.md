@@ -154,7 +154,7 @@ The target name ("HelloWorld") is the .xcworkspace folder name without the .xcwo
 
 ---
 
-## Backgrounds
+## Background
 
 We want to wrap a native project as a React Native app host easily without hurting so much times by touching the native code or native platform tooling e.g. changing app icon, app metadata, touching native C++, Swift & Objective-C code for upgrading React Native, etc.
 
@@ -171,7 +171,9 @@ import {
 
 export default {
   
-  // name is shared, but overrwrite through the platform configuration is still possible, e.g. CFBundleDisplayName in macOS Info.plist
+  // the `name` is shared, but overwriting through
+  // the platform configuration is still possible,
+  // e.g. CFBundleDisplayName in macOS Info.plist
   name: "Hello World App",
 
   macos: {
@@ -235,7 +237,7 @@ For Android and iOS, it is better to use [Expo](https://github.com/expo/expo) ri
 
 ### Sandboxed Plugin
 
-Not to mention, `bundo-appgen` is also sandboxing the plugin invocation. We do not allow a plugin to perform a unrestricted action such as File System, Networking, Child Process, and other actions in Node.js. See [Node.js Permission Model](https://nodejs.org/api/permissions.html).
+Not to mention, `bundo-appgen` is also sandboxing the plugin invocation. We do not allow a plugin to perform an unrestricted action such as File System, Networking, Child Process, and other actions in Node.js. See [Node.js Permission Model](https://nodejs.org/api/permissions.html).
 
 We only allow plugins to run their main function in restricted permission. Currently, we only allow this listed permission for plugin
 - **File System** - **Read only** access to these directories and/or files
