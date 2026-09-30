@@ -35,12 +35,6 @@ export interface Data {
 	bundleIdentifier: string,
 
 	/**
-	 * This corresponds to `CFBundleURLSchemes`.
-	 * The string is should matching the following pattern: ^[a-z][a-z0-9+.-]*$
-	 */
-	bundleUrlSchemes?: string | string[],
-
-	/**
 	 * Customize the information property list values for your app.
 	 * 
 	 * For human readable information property list, you can localize the information property through string catalog. See {@link stringCatalogs|`stringCatalogs`}
