@@ -233,7 +233,7 @@ export default {
 
 `bundo-appgen` is currently supporting macOS. Right after we are sure that our appgen (App Generator) for macOS is fully-ready-stabily, `bundo-appgen` will support the Windows platform, because it is really our primary main focus initially.
 
-For Android and iOS, it is better to use [Expo](https://github.com/expo/expo) righ now. It provides variety of first party packages in its ecosystem.
+For Android and iOS, it is better to use [Expo](https://github.com/expo/expo) right now. It provides variety of first party packages in its ecosystem.
 
 ### Sandboxed Plugin
 
