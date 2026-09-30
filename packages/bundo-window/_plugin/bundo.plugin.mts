@@ -25,6 +25,7 @@ export default function(ctx: Plugin.Context<Parameter>) {
 				-1
 
 		{
+			// find the `Window(...)`
 			let ln = -1
 			for(const line of appDelegateLines) {
 				ln++
@@ -35,6 +36,7 @@ export default function(ctx: Plugin.Context<Parameter>) {
 			}
 		}
 		{
+			// find the existing modifier `.windowStyle(.hiddenToolbar)` if any
 			let ln = -1
 			for(const line of appDelegateLines) {
 				ln++
@@ -52,19 +54,15 @@ export default function(ctx: Plugin.Context<Parameter>) {
 			throw new Error("Unexpected template files. Cannot find \"Window(...)\" line in AppDelegate.swift.")
 		}
 
-		// find the until the end curly bracket found
+		// find the first curly end bracket with four spaces.
+		// We guess that /\s\s\s\s\}/ is the end bracket of Window
+		// If user somehow add/remove the space
+		// It is a unexpected template files. We just throw an error
 		const windowBlockEndLine = findLastLineOf(
 			/\s\s\s\s\}/,
 			appDelegateLines,
 			windowBlockStartLine,
 		)
-
-		// find the first curly end bracket with four spaces.
-		// We guess that /\s\s\s\s\}/ is the end bracket of Window
-		// If user somehow add/remove the space
-		for(let ln = windowBlockStartLine; ln < appDelegateLines.length; ln++) {
-			//
-		}
 
 		if(windowBlockEndLine == -1) {
 			throw new Error("Unexpected template files. Cannot find the end \"}\" of \"Window\" line in AppDelegate.swift.")
@@ -81,6 +79,7 @@ export default function(ctx: Plugin.Context<Parameter>) {
 				windowBlockEndLine,
 			)
 
+			// put the modifier chain to the lines
 			appDelegateLines.splice(
 				modifierEndLine > -1
 					? modifierEndLine + 1
