@@ -1,0 +1,28 @@
+name: Code Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  code-check:
+    name: TypeScript & ESLint check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+         # Fetch all history so git diff can compare branches accurately
+         fetch-depth: 0
+      - name: Bun
+        uses: oven-sh/setup-bun@v2
+        # use package.json - engines.bun for the Bun version
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+      - name: TypeScript Check
+        run: |
+          bun run type-check
+      - name: Lint Staged (ESLint)
+        run: |
+          bunx lint-staged --diff="origin/${{ github.base_ref }}...HEAD"
