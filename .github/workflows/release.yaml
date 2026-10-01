@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    name: Package Release
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write # For GitHub Release
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Bun.js
+        uses: oven-sh/setup-bun@v2
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+      - name: Release NPM
+        run: |
+          bun run ./scripts/release-npm.mts --tag ${{ github.ref_name }}
