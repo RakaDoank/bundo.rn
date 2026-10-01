@@ -13,6 +13,9 @@
 	"scripts": {
 		"build": "bun ./_scripts/build.mts"
 	},
+	"peerDependencies": {
+		"react-native-macos": "^0.81"
+	},
 	"files": [
 		"android",
 		"apple",
