@@ -1,5 +1,3 @@
-import semverSatisfies from "semver/functions/satisfies.js"
-
 import {
 	GlobalVars,
 } from "../../../_global-vars/index.mts"
@@ -25,14 +23,6 @@ export function isCompatible(): boolean {
 
 	if(!osCompatible) {
 		return GlobalVars.argv.get().forceCrossPlatform
-	}
-
-	if(process.versions.bun) {
-		return semverSatisfies(process.versions.bun, "^1")
-	}
-
-	if(process.versions.node) {
-		return semverSatisfies(process.versions.node, ">=22")
 	}
 
 	return false
