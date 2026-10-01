@@ -1,5 +1,7 @@
+import * as node_childProcess from "node:child_process"
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
+import * as node_util from "node:util"
 
 import {
 	Glob,
@@ -34,7 +36,12 @@ const
 		})(),
 
 	srcEntrypoints: string[] =
-		[]
+		[],
+
+	childProcessExec =
+		node_util.promisify(
+			node_childProcess.exec,
+		)
 
 {
 	const glob = new Glob("**/*.mts")
@@ -64,7 +71,6 @@ await Promise.all([
 			node_path.join(paths.src.bin, "plugin-sandbox-runner", "plugin-sandbox-runner.mts"),
 		],
 		external: [
-			"semver",
 			"tsx",
 			"tsx/cjs",
 			"typescript",
@@ -98,5 +104,13 @@ await Promise.all([
 		outdir: paths.lib.commonjs,
 		target: "node",
 	}),
+
+	// TypeScript definitions
+	childProcessExec(
+		"bunx tsc --project tsconfig.build-types.json",
+		{
+			cwd: paths.root,
+		},
+	),
 
 ])
