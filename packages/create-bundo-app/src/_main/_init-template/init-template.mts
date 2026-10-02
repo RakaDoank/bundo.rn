@@ -5,9 +5,9 @@ import {
 	initMonorepo,
 } from "./_init-monorepo.mts"
 
-export function initTemplate() {
+export async function initTemplate() {
 
-	initMonorepo()
-	initApp()
+	await initMonorepo()
+	await initApp()
 
 }

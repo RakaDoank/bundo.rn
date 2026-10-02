@@ -222,34 +222,16 @@ async function initFiles(
 					),
 				) as typeof import("../../../templates/bundo-base-macos/package.json"),
 
-			packageJsonMonorepoPath =
+			packageJsonMonorepoTemplatePath =
 				node_path.join(templatesDir, "bundo-monorepo-project", "package.json"),
 
-			packageJsonMonorepo =
+			packageJsonMonorepoTemplate =
 				JSON.parse(
 					node_fs.readFileSync(
-						packageJsonMonorepoPath,
+						packageJsonMonorepoTemplatePath,
 						"utf8",
 					),
-				) as typeof import("../../../templates/bundo-monorepo-project/package.json"),
-
-			bundoRnVersion =
-				await fetch(
-					"https://registry.npmjs.org/bundo.rn"
-						+ (CreateBundoAppPackageJson.version.includes("-beta.") ? "/beta" : "/latest"),
-				)
-					.then(async res => {
-						const json = await res.json() as {
-							version: string,
-						}
-						if(json && typeof json === "object" && typeof json?.version === "string") {
-							return json.version
-						}
-						throw new Error()
-					})
-					.catch(() => {
-						return BundoRnPackageJson.version
-					})
+				) as typeof import("../../../templates/bundo-monorepo-project/package.json")
 
 		const dependencies: Record<string, string> = {}
 
@@ -258,10 +240,25 @@ async function initFiles(
 				if(isMonorepo) {
 					// prepend "app-ui" right before "bundo.rn"
 					dependencies["app-ui"] = "workspace:"
-
 					dependencies["bundo.rn"] = "catalog:"
-					packageJsonMonorepo.workspaces.catalog["bundo.rn"] = bundoRnVersion
 				} else {
+					const bundoRnVersion = await fetch(
+						"https://registry.npmjs.org/bundo.rn"
+							+ (CreateBundoAppPackageJson.version.includes("-beta.") ? "/beta" : "/latest"),
+					)
+						.then(async res => {
+							const json = await res.json() as {
+								version: string,
+							}
+							if(json && typeof json === "object" && typeof json?.version === "string") {
+								return json.version
+							}
+							throw new Error()
+						})
+						.catch(() => {
+							return BundoRnPackageJson.version
+						})
+
 					dependencies["bundo.rn"] = bundoRnVersion
 				}
 			} else {
@@ -271,7 +268,7 @@ async function initFiles(
 				) {
 					// resolve the actual dependency versioning from the catalog package.json
 
-					const catalogVersion = (packageJsonMonorepo.workspaces.catalog as Record<string, string>)[dependency]
+					const catalogVersion = (packageJsonMonorepoTemplate.workspaces.catalog as Record<string, string>)[dependency]
 
 					if(catalogVersion) {
 						dependencies[dependency] = catalogVersion
@@ -289,14 +286,6 @@ async function initFiles(
 			JSON.stringify(packageJson, null, 2),
 			"utf8",
 		)
-
-		if(isMonorepo) {
-			node_fs.writeFileSync(
-				packageJsonMonorepoPath,
-				JSON.stringify(packageJsonMonorepo, null, 2),
-				"utf-8",
-			)
-		}
 	}
 
 	// src/$$App.tsx

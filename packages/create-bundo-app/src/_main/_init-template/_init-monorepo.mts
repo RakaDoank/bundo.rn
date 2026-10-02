@@ -1,11 +1,14 @@
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
+import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
+import CreateBundoAppPackageJson from "../../../package.json" with { type: "json" }
+
 import {
 	GlobalVars,
 } from "../_global-vars/index.mts"
 
-export function initMonorepo() {
+export async function initMonorepo() {
 
 	const
 		templatesDir =
@@ -78,23 +81,88 @@ export function initMonorepo() {
 		node_path.join(process.cwd(), ".gitignore"),
 	)
 
-	if(packageManager == "bun") {
-		// Client wants to use Bun package manager
-		// remove the pnpm-workspace.yaml
-		node_fs.rmSync(
-			node_path.join(process.cwd(), "pnpm-workspace.yaml"),
-			{
-				force: true,
-			},
-		)
-	} else {
-		// Client wants to use pnpm
-		// remove the bunfig.toml
-		node_fs.rmSync(
-			node_path.join(process.cwd(), "bunfig.toml"),
-			{
-				force: true,
-			},
+	// package.json
+	// pnpm-workspace.yaml
+	{
+		const
+			packageJsonPath =
+				node_path.join(process.cwd(), "package.json"),
+
+			packageJson =
+				JSON.parse(
+					node_fs.readFileSync(
+						packageJsonPath,
+						"utf8",
+					),
+				) as typeof import("../../../templates/bundo-monorepo-project/package.json"),
+
+			bundoRnVersion =
+				await fetch(
+					"https://registry.npmjs.org/bundo.rn"
+						+ (CreateBundoAppPackageJson.version.includes("-beta.") ? "/beta" : "/latest"),
+				)
+					.then(async res => {
+						const json = await res.json() as {
+							version: string,
+						}
+						if(json && typeof json === "object" && typeof json?.version === "string") {
+							return json.version
+						}
+						throw new Error()
+					})
+					.catch(() => {
+						return BundoRnPackageJson.version
+					})
+
+		if(packageManager == "bun") {
+			// Client wants to use Bun package manager
+			node_fs.renameSync(
+				node_path.join(process.cwd(), "$$bunfig.toml"),
+				node_path.join(process.cwd(), "bunfig.toml"),
+			)
+
+			// remove the $$pnpm-workspace.yaml
+			node_fs.rmSync(
+				node_path.join(process.cwd(), "$$pnpm-workspace.yaml"),
+				{
+					force: true,
+				},
+			)
+
+			// change the bundo.rn catalog in the package.json
+			packageJson.workspaces.catalog["bundo.rn"] = bundoRnVersion
+		} else {
+			const pnpmWorkspacePath = node_path.join(process.cwd(), "pnpm-workspace.yaml")
+
+			// Client wants to use pnpm
+			node_fs.renameSync(
+				node_path.join(process.cwd(), "$$pnpm-workspace.yaml"),
+				pnpmWorkspacePath,
+			)
+
+			// remove the bunfig.toml
+			node_fs.rmSync(
+				node_path.join(process.cwd(), "$$bunfig.toml"),
+				{
+					force: true,
+				},
+			)
+
+			// @ts-expect-error remove the "workspaces" property in the package.json
+			delete packageJson.workspaces
+
+			// change the bundo.rn catalog in the pnpm-workspace.yaml
+			let pnpmWorkspace = node_fs.readFileSync(pnpmWorkspacePath, "utf8")
+			pnpmWorkspace = pnpmWorkspace.replace("- 'bundo.rn': $$", `- 'bundo.rn': ${bundoRnVersion}`)
+
+			node_fs.writeFileSync(pnpmWorkspacePath, pnpmWorkspace, "utf8")
+		}
+
+		// rewrite it
+		node_fs.writeFileSync(
+			packageJsonPath,
+			JSON.stringify(packageJson, null, 2),
+			"utf8",
 		)
 	}
 
