@@ -31,17 +31,18 @@ if(argv.tag.startsWith("v")) {
 	// Bundle and publish all packages
 
 	const packages = [
+		"bundo-appgen", // bundo-appgen has to be first package
 		"bundo.rn",
-		"bundo-appgen",
 		"bundo-window",
 		"create-bundo-app",
 	]
 
 	for(const pkg of packages) {
 		node_childProcess.execSync(
-			`bun run build && bun publish`,
+			`bun run build && bun publish --dry-run`,
 			{
 				cwd: node_path.join(rootDir, "packages", pkg),
+				stdio: "inherit",
 			},
 		)
 	}
@@ -60,9 +61,10 @@ if(argv.tag.startsWith("v")) {
 	}
 
 	node_childProcess.execSync(
-		`bun run build && bun publish`,
+		`bun run build && bun publish --dry-run`,
 		{
 			cwd: packageDirectory,
+			stdio: "inherit",
 		},
 	)
 
