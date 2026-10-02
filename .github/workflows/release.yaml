@@ -3,7 +3,10 @@ name: Release
 on:
   push:
     tags:
-      - '*@*'
+      - 'bundo-appgen@*'
+      - 'bundo-window@*'
+      - 'bundo.rn@*'
+      - 'create-bundo-app@*'
       - 'v*'
 
 jobs:
