@@ -1,5 +1,5 @@
 import {
-	Config,
+  Config,
 } from "bundo.rn/appgen"
 
 /**

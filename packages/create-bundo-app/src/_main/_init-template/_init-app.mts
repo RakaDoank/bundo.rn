@@ -2,6 +2,7 @@ import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
 import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
+import CreateBundoAppPackageJson from "../../../package.json" with { type: "json" }
 
 import {
 	GlobalVars,
@@ -221,16 +222,22 @@ async function initFiles(
 					),
 				) as typeof import("../../../templates/bundo-base-macos/package.json"),
 
+			packageJsonMonorepoPath =
+				node_path.join(templatesDir, "bundo-monorepo-project", "package.json"),
+
 			packageJsonMonorepo =
 				JSON.parse(
 					node_fs.readFileSync(
-						node_path.join(templatesDir, "bundo-monorepo-project", "package.json"),
+						packageJsonMonorepoPath,
 						"utf8",
 					),
 				) as typeof import("../../../templates/bundo-monorepo-project/package.json"),
 
 			bundoRnVersion =
-				await fetch("https://registry.npmjs.org/bundo.rn/latest")
+				await fetch(
+					"https://registry.npmjs.org/bundo.rn"
+						+ (CreateBundoAppPackageJson.version.includes("-beta.") ? "/beta" : "/latest"),
+				)
 					.then(async res => {
 						const json = await res.json() as {
 							version: string,
@@ -246,13 +253,17 @@ async function initFiles(
 
 		const dependencies: Record<string, string> = {}
 
-		Object.entries(packageJson.dependencies).forEach(([dependency, version]) => {
+		for(const [dependency, version] of Object.entries(packageJson.dependencies)) {
 			if(dependency == "bundo.rn") {
 				if(isMonorepo) {
 					// prepend "app-ui" right before "bundo.rn"
 					dependencies["app-ui"] = "workspace:"
+
+					dependencies["bundo.rn"] = "catalog:"
+					packageJsonMonorepo.workspaces.catalog["bundo.rn"] = bundoRnVersion
+				} else {
+					dependencies["bundo.rn"] = bundoRnVersion
 				}
-				dependencies[dependency] = bundoRnVersion
 			} else {
 				if(
 					!isMonorepo &&
@@ -269,7 +280,7 @@ async function initFiles(
 					dependencies[dependency] = version
 				}
 			}
-		})
+		}
 
 		packageJson.dependencies = dependencies as typeof packageJson.dependencies
 
@@ -278,6 +289,14 @@ async function initFiles(
 			JSON.stringify(packageJson, null, 2),
 			"utf8",
 		)
+
+		if(isMonorepo) {
+			node_fs.writeFileSync(
+				packageJsonMonorepoPath,
+				JSON.stringify(packageJsonMonorepo, null, 2),
+				"utf-8",
+			)
+		}
 	}
 
 	// src/$$App.tsx
