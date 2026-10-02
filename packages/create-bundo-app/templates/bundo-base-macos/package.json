@@ -16,6 +16,7 @@
     "react-native-safe-area-context": "catalog:"
   },
   "devDependencies": {
+    "@react-native-community/cli": "catalog:",
     "@react-native/babel-preset": "0.81.6",
     "@react-native/metro-config": "0.81.6",
 		"@rnx-kit/metro-config": "catalog:",

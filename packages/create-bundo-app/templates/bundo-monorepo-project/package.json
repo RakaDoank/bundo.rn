@@ -9,6 +9,7 @@
   },
   "workspaces": {
     "catalog": {
+      "@react-native-community/cli": "20.2.0",
       "@rnx-kit/metro-config": "2.2.5",
       "@rnx-kit/metro-resolver-symlinks": "0.3.2",
       "bundo.rn": "$$",

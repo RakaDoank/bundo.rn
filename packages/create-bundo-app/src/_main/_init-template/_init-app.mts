@@ -2,7 +2,6 @@ import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
 import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
-import CreateBundoAppPackageJson from "../../../package.json" with { type: "json" }
 
 import {
 	GlobalVars,
@@ -231,55 +230,32 @@ async function initFiles(
 						packageJsonMonorepoTemplatePath,
 						"utf8",
 					),
-				) as typeof import("../../../templates/bundo-monorepo-project/package.json")
+				) as typeof import("../../../templates/bundo-monorepo-project/package.json"),
 
-		const dependencies: Record<string, string> = {}
+			resolvedDependencies =
+				await resolveDependenciesVersion({
+					dependencies: packageJson.dependencies,
+					isMonorepo: !!isMonorepo,
+					packageJsonMonorepoTemplate,
+				}),
 
-		for(const [dependency, version] of Object.entries(packageJson.dependencies)) {
-			if(dependency == "bundo.rn") {
-				if(isMonorepo) {
-					// prepend "app-ui" right before "bundo.rn"
-					dependencies["app-ui"] = "workspace:"
-					dependencies["bundo.rn"] = "catalog:"
-				} else {
-					const bundoRnVersion = await fetch(
-						"https://registry.npmjs.org/bundo.rn"
-							+ (CreateBundoAppPackageJson.version.includes("-beta.") ? "/beta" : "/latest"),
-					)
-						.then(async res => {
-							const json = await res.json() as {
-								version: string,
-							}
-							if(json && typeof json === "object" && typeof json?.version === "string") {
-								return json.version
-							}
-							throw new Error()
-						})
-						.catch(() => {
-							return BundoRnPackageJson.version
-						})
-
-					dependencies["bundo.rn"] = bundoRnVersion
-				}
-			} else {
-				if(
-					!isMonorepo &&
-					version == "catalog:"
-				) {
-					// resolve the actual dependency versioning from the catalog package.json
-
-					const catalogVersion = (packageJsonMonorepoTemplate.workspaces.catalog as Record<string, string>)[dependency]
-
-					if(catalogVersion) {
-						dependencies[dependency] = catalogVersion
+			dependencies: Record<string, string> =
+				isMonorepo
+					? {
+						"app-ui": "workspace:",
+						...resolvedDependencies,
 					}
-				} else {
-					dependencies[dependency] = version
-				}
-			}
-		}
+					: resolvedDependencies,
+
+			devDependencies: Record<string, string> =
+				await resolveDependenciesVersion({
+					dependencies: packageJson.devDependencies,
+					isMonorepo: !!isMonorepo,
+					packageJsonMonorepoTemplate,
+				})
 
 		packageJson.dependencies = dependencies as typeof packageJson.dependencies
+		packageJson.devDependencies = devDependencies as typeof packageJson.devDependencies
 
 		node_fs.writeFileSync(
 			packageJsonPath,
@@ -315,4 +291,57 @@ async function initFiles(
 			)
 		}
 	}
+}
+
+async function resolveDependenciesVersion(
+	data: {
+		dependencies: Record<string, string>,
+		isMonorepo: boolean,
+		packageJsonMonorepoTemplate: typeof import("../../../templates/bundo-monorepo-project/package.json"),
+	},
+): Promise<Record<string, string>> {
+	const dependencies: Record<string, string> = {}
+
+	for(const [dependency, version] of Object.entries(data.dependencies)) {
+		if(dependency == "bundo.rn") {
+			if(data.isMonorepo) {
+				dependencies["bundo.rn"] = "catalog:"
+			} else {
+				const bundoRnVersion = await fetch(
+					"https://registry.npmjs.org/bundo.rn/latest",
+				)
+					.then(async res => {
+						const json = await res.json() as {
+							version: string,
+						}
+						if(json && typeof json === "object" && typeof json?.version === "string") {
+							return json.version
+						}
+						throw new Error()
+					})
+					.catch(() => {
+						return BundoRnPackageJson.version
+					})
+
+				dependencies["bundo.rn"] = bundoRnVersion
+			}
+		} else {
+			if(
+				!data.isMonorepo &&
+				version == "catalog:"
+			) {
+				// resolve the actual dependency versioning from the catalog package.json
+
+				const catalogVersion = (data.packageJsonMonorepoTemplate.workspaces.catalog as Record<string, string>)[dependency]
+
+				if(catalogVersion) {
+					dependencies[dependency] = catalogVersion
+				}
+			} else {
+				dependencies[dependency] = version
+			}
+		}
+	}
+
+	return dependencies
 }
