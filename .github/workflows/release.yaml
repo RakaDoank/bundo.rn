@@ -3,7 +3,8 @@ name: Release
 on:
   push:
     tags:
-      - v*
+      - '*@v*'
+      - 'v*'
 
 jobs:
   release:
@@ -18,8 +19,7 @@ jobs:
       - name: Use Bun.js
         uses: oven-sh/setup-bun@v2
 
-      # Currently, we are using `npm` for publishing,
-      # until Bun support --provenance https://github.com/oven-sh/bun/issues/15601
+      # Currently, we are using `npm` for publishing
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
