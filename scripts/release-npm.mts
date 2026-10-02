@@ -28,29 +28,64 @@ const
 			})
 			.parseSync()
 
-let command = "bun run build && bun publish --access public"
+const publishCommand = [
+	"bunx npm publish",
+	"--access public",
+]
 
 if(argv.tag.startsWith("v")) {
 	// bundo.rn
 	// Bundle and publish all packages
 
 	const packages = [
-		"bundo-appgen", // bundo-appgen has to be first package
+		"bundo-appgen", // bundo-appgen has to be the first package
 		"bundo.rn",
 		"bundo-window",
 		"create-bundo-app",
 	]
 
 	for(const pkg of packages) {
-		const prereleaseTag = SemverPrerelease(argv.tag)
-		if(typeof prereleaseTag?.[0] == "string") {
-			command += ` --tag ${prereleaseTag[0]}`
+		const
+			packageDir =
+				node_path.join(rootDir, "packages", pkg),
+
+			packageJson =
+				JSON.parse(
+					node_fs.readFileSync(
+						node_path.join(packageDir, "package.json"),
+						"utf8",
+					),
+				) as typeof import("../package.json") // just for the schema/definition
+
+		// check if the version from the tag is same from the packageJson.version
+		if(`v${packageJson.version}` !== argv.tag) {
+			throw new Error(`Cannot publish ${pkg} v${packageJson.version}, while using GIT tag ${argv.tag}.`)
 		}
 
+		const prereleaseTag = SemverPrerelease(argv.tag)
+		if(typeof prereleaseTag?.[0] == "string") {
+			publishCommand.push(`--tag ${prereleaseTag[0]}`)
+		}
+
+		// build and create the tarball file
 		node_childProcess.execSync(
-			command,
+			"bun run build && bun pm pack",
 			{
-				cwd: node_path.join(rootDir, "packages", pkg),
+				cwd: packageDir,
+				stdio: "inherit",
+			},
+		)
+
+		publishCommand.splice(
+			1,
+			0,
+			`./${pkg}-${packageJson.version}.tgz`,
+		)
+
+		node_childProcess.execSync(
+			publishCommand.join(" "),
+			{
+				cwd: packageDir,
 				stdio: "inherit",
 			},
 		)
@@ -58,26 +93,61 @@ if(argv.tag.startsWith("v")) {
 
 } else {
 
-	// Specific package
-	const packageName = argv.tag.replace(/@.*/, "")
-	if(!packageName) {
-		throw new Error("Cannot extract the package name from the tag. The tag format must be \"the-package-name@v1.2.3\".")
+	const matchedTag = argv.tag.match(/(.*)@(v.*)/)
+	if(!matchedTag?.[1] || !matchedTag?.[2]) {
+		throw new Error("Cannot extract the package name and the version from the tag. The tag format must be \"the-package-name@v1.2.3\".")
 	}
 
-	const packageDirectory = node_path.join(rootDir, "packages", packageName)
-	if(!node_fs.existsSync(packageDirectory)) {
+	const
+		packageName =
+			matchedTag[1],
+
+		version =
+			matchedTag[2],
+
+		packageDir =
+			node_path.join(rootDir, "packages", packageName),
+
+		packageJson =
+			JSON.parse(
+				node_fs.readFileSync(
+					node_path.join(packageDir, "package.json"),
+					"utf8",
+				),
+			) as typeof import("../package.json") // just for the schema/definition
+
+	if(!node_fs.existsSync(packageDir)) {
 		throw new Error(`${packageName} was not found in the packages.`)
 	}
 
-	const prereleaseTag = SemverPrerelease(argv.tag)
-	if(typeof prereleaseTag?.[0] == "string") {
-		command += ` --tag ${prereleaseTag[0]}`
+	if(`v${packageJson.version}` !== version) {
+		throw new Error(`Cannot publish ${packageName}@v${packageJson.version}, while using GIT tag ${argv.tag}.`)
 	}
 
+	const prereleaseTag = SemverPrerelease(version)
+	if(typeof prereleaseTag?.[0] == "string") {
+		publishCommand.push(`--tag ${prereleaseTag[0]}`)
+	}
+
+	// build and create the tarball file
 	node_childProcess.execSync(
-		command,
+		"bun run build && bun pm pack",
 		{
-			cwd: packageDirectory,
+			cwd: packageDir,
+			stdio: "inherit",
+		},
+	)
+
+	publishCommand.splice(
+		1,
+		0,
+		`./${packageName}-${packageJson.version}.tgz`,
+	)
+
+	node_childProcess.execSync(
+		publishCommand.join(" "),
+		{
+			cwd: packageDir,
 			stdio: "inherit",
 		},
 	)
