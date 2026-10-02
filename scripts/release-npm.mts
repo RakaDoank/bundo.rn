@@ -5,6 +5,7 @@ import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
 import SemverPrerelease from "semver/functions/prerelease.js"
+import SemverValid from "semver/functions/valid.js"
 
 import yargs from "yargs"
 import * as YargsHelper from "yargs/helpers"
@@ -23,7 +24,7 @@ const
 				"tag": {
 					type: "string",
 					description: "Specific tag of package to publish.",
-					demandOption: "Please specify the tag of package to publish. For example \"v2.0\", or \"bundo-appgen@v1.2.3\"",
+					demandOption: "Please specify the tag of package to publish. For example \"v2.0\", or \"the-package-name@1.2.3\"",
 				},
 			})
 			.parseSync()
@@ -86,9 +87,13 @@ if(argv.tag.startsWith("v")) {
 
 } else {
 
-	const matchedTag = argv.tag.match(/(.*)@(v.*)/)
-	if(!matchedTag?.[1] || !matchedTag?.[2]) {
-		throw new Error("Cannot extract the package name and the version from the tag. The tag format must be \"the-package-name@v1.2.3\".")
+	const matchedTag = argv.tag.match(/(.*)@(.*)/)
+	if(
+		!matchedTag?.[1] ||
+		!matchedTag?.[2] ||
+		!SemverValid(matchedTag[2])
+	) {
+		throw new Error("Cannot extract the package name and the version from the tag. The tag format must be \"the-package-name@1.2.3\".")
 	}
 
 	const
