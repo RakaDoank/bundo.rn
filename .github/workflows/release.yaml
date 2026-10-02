@@ -12,11 +12,19 @@ jobs:
     environment: release
     permissions:
       contents: write # For GitHub Release
-      id-token: write
+      id-token: write # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
     steps:
       - uses: actions/checkout@v6
       - name: Use Bun.js
         uses: oven-sh/setup-bun@v2
+
+      # Currently, we are using `npm` for publishing,
+      # until Bun support --provenance https://github.com/oven-sh/bun/issues/15601
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
       - name: Install Dependencies
         run: bun install --frozen-lockfile
       - name: Release NPM

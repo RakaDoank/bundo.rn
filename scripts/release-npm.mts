@@ -28,6 +28,12 @@ const
 			})
 			.parseSync()
 
+/**
+ * Currently, we are using `npm` for publishing,
+ * until bun support the --provenance https://github.com/oven-sh/bun/issues/15601
+ */
+let command = "bun run build && bunx npm publish --access public --provenance"
+
 if(argv.tag.startsWith("v")) {
 	// bundo.rn
 	// Bundle and publish all packages
@@ -40,8 +46,6 @@ if(argv.tag.startsWith("v")) {
 	]
 
 	for(const pkg of packages) {
-		let command = "bun run build && bun publish"
-
 		const prereleaseTag = SemverPrerelease(argv.tag)
 		if(typeof prereleaseTag?.[0] == "string") {
 			command += ` --tag ${prereleaseTag[0]}`
@@ -68,8 +72,6 @@ if(argv.tag.startsWith("v")) {
 	if(!node_fs.existsSync(packageDirectory)) {
 		throw new Error(`${packageName} was not found in the packages.`)
 	}
-
-	let command = "bun run build && bun publish"
 
 	const prereleaseTag = SemverPrerelease(argv.tag)
 	if(typeof prereleaseTag?.[0] == "string") {
