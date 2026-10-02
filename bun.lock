@@ -13,6 +13,7 @@
         "@types/bun": "^1",
         "@types/node": "^24",
         "@types/react": "19.3.0",
+        "@types/semver": "^7.8.0",
         "@types/yargs": "17.0.35",
         "bundo-appgen": "workspace:*",
         "create-bundo-app": "workspace:*",
@@ -26,6 +27,7 @@
         "husky": "9.1.7",
         "lint-staged": "17.6.0",
         "react-native-builder-bob": "0.43.1",
+        "semver": "^7.8.5",
         "tsx": "4.23.15",
         "typescript": "6.0.3",
         "typescript-eslint": "8.70.1",
@@ -33,7 +35,7 @@
     },
     "packages/bundo-appgen": {
       "name": "bundo-appgen",
-      "version": "0.0.1-beta.1",
+      "version": "0.0.1-beta.2",
       "bin": "./bin.mjs",
       "devDependencies": {
         "typescript": ">=6 <=7",
@@ -48,14 +50,14 @@
     },
     "packages/bundo-window": {
       "name": "bundo-window",
-      "version": "0.0.1-beta.1",
+      "version": "0.0.1-beta.2",
       "peerDependencies": {
         "react-native-macos": "^0.81",
       },
     },
     "packages/bundo.rn": {
       "name": "bundo.rn",
-      "version": "0.0.1-beta.1",
+      "version": "0.0.1-beta.2",
       "bin": {
         "bundo": "./bin.mjs",
         "bundo.rn": "./bin.mjs",
@@ -75,7 +77,7 @@
     },
     "packages/create-bundo-app": {
       "name": "create-bundo-app",
-      "version": "0.0.1-beta.1",
+      "version": "0.0.1-beta.2",
       "bin": "./lib/bin.mjs",
     },
     "playground/hello-bundo": {
@@ -702,6 +704,8 @@
     "@types/node": ["@types/node@24.19.0", "", { "dependencies": { "undici-types": ">=7.24.0 <7.24.7" } }, "sha512-zY+5tKxXdhGh1PYI0ac+7juvEu4OI6vWtVVoj5i2m42jxAY1U+zHGt6QCyOFwykdP62sM3MJ9stoYYUw5aCWew=="],
 
     "@types/react": ["@types/react@19.3.0", "", { "dependencies": { "csstype": "^3.2.2" } }, "sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg=="],
+
+    "@types/semver": ["@types/semver@7.8.0", "", {}, "sha512-1mAINjtQCXXeLkJ9ehXkwOcBpqtLxiVtKhpUf83DdRNdQKV0iXZpaHYqRr7nj+wvxuJzoAmAwXI+sCNMv1CzLQ=="],
 
     "@types/stack-utils": ["@types/stack-utils@2.0.3", "", {}, "sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw=="],
 

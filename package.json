@@ -6,7 +6,7 @@
 	"scripts": {
 		"code-check": "npm run type-check && npm run lint",
 		"lint": "eslint",
-		"prepare": "husky init",
+		"prepare": "husky",
 		"type-check": "tsc --build"
 	},
 	"workspaces": {
@@ -30,6 +30,7 @@
 		"@types/bun": "^1",
 		"@types/node": "^24",
 		"@types/react": "19.3.0",
+		"@types/semver": "^7.8.0",
 		"@types/yargs": "17.0.35",
 		"bundo-appgen": "workspace:*",
 		"create-bundo-app": "workspace:*",
@@ -43,6 +44,7 @@
 		"husky": "9.1.7",
 		"lint-staged": "17.6.0",
 		"react-native-builder-bob": "0.43.1",
+		"semver": "^7.8.5",
 		"tsx": "4.23.15",
 		"typescript": "6.0.3",
 		"typescript-eslint": "8.70.1"

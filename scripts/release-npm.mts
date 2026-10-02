@@ -4,6 +4,8 @@ import * as node_childProcess from "node:child_process"
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
+import SemverPrerelease from "semver/functions/prerelease.js"
+
 import yargs from "yargs"
 import * as YargsHelper from "yargs/helpers"
 
@@ -38,8 +40,15 @@ if(argv.tag.startsWith("v")) {
 	]
 
 	for(const pkg of packages) {
+		let command = "bun run build && bun publish"
+
+		const prereleaseTag = SemverPrerelease(argv.tag)
+		if(typeof prereleaseTag?.[0] == "string") {
+			command += ` --tag ${prereleaseTag[0]}`
+		}
+
 		node_childProcess.execSync(
-			`bun run build && bun publish --dry-run`,
+			command,
 			{
 				cwd: node_path.join(rootDir, "packages", pkg),
 				stdio: "inherit",
@@ -60,8 +69,15 @@ if(argv.tag.startsWith("v")) {
 		throw new Error(`${packageName} was not found in the packages.`)
 	}
 
+	let command = "bun run build && bun publish"
+
+	const prereleaseTag = SemverPrerelease(argv.tag)
+	if(typeof prereleaseTag?.[0] == "string") {
+		command += ` --tag ${prereleaseTag[0]}`
+	}
+
 	node_childProcess.execSync(
-		`bun run build && bun publish --dry-run`,
+		command,
 		{
 			cwd: packageDirectory,
 			stdio: "inherit",
