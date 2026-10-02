@@ -11,7 +11,7 @@
 		"directory": "packages/bundo.rn"
 	},
 	"scripts": {
-		"build": "bun run ./_scripts/build.mts"
+		"build": "bun ./_scripts/build.mts"
 	},
 	"bin": {
 		"bundo": "./bin.mjs",

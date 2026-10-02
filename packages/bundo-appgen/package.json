@@ -11,7 +11,7 @@
 		"directory": "packages/bundo-appgen"
 	},
 	"scripts": {
-		"build": "bun run ./_scripts/build.mts",
+		"build": "bun ./_scripts/build.mts",
 		"build-types": "bunx tsc --project ./tsconfig.build-types.json"
 	},
 	"bin": "./bin.mjs",

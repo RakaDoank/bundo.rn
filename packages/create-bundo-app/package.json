@@ -11,7 +11,7 @@
 		"directory": "packages/create-bundo-app"
 	},
 	"scripts": {
-		"build": "bun run ./_scripts/build.mts"
+		"build": "bun ./_scripts/build.mts"
 	},
 	"files": [
 		"lib",

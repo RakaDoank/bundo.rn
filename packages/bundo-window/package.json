@@ -11,7 +11,7 @@
 		"directory": "packages/bundo-window"
 	},
 	"scripts": {
-		"build": "bun run ./_scripts/build.mts"
+		"build": "bun ./_scripts/build.mts"
 	},
 	"peerDependencies": {
 		"react-native-macos": "^0.81"
