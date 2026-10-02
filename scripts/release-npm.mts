@@ -100,6 +100,10 @@ if(argv.tag.startsWith("v")) {
 		packageName =
 			matchedTag[1],
 
+		/**
+		 * The semver without the leading "v"
+		 * @example "0.0.1-beta.4"
+		 */
 		version =
 			matchedTag[2],
 
@@ -118,8 +122,8 @@ if(argv.tag.startsWith("v")) {
 		throw new Error(`${packageName} was not found in the packages.`)
 	}
 
-	if(`v${packageJson.version}` !== version) {
-		throw new Error(`Cannot publish ${packageName}@v${packageJson.version}, while using GIT tag ${argv.tag}.`)
+	if(packageJson.version !== version) {
+		throw new Error(`Cannot publish ${packageName}@${packageJson.version}, while using GIT tag ${argv.tag}.`)
 	}
 
 	// build and create the tarball file
