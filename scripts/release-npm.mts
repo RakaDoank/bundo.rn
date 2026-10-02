@@ -28,11 +28,6 @@ const
 			})
 			.parseSync()
 
-const publishCommand = [
-	"bunx npm publish",
-	"--access public",
-]
-
 if(argv.tag.startsWith("v")) {
 	// bundo.rn
 	// Bundle and publish all packages
@@ -61,11 +56,6 @@ if(argv.tag.startsWith("v")) {
 			throw new Error(`Cannot publish ${pkg} v${packageJson.version}, while using GIT tag ${argv.tag}.`)
 		}
 
-		const prereleaseTag = SemverPrerelease(argv.tag)
-		if(typeof prereleaseTag?.[0] == "string") {
-			publishCommand.push(`--tag ${prereleaseTag[0]}`)
-		}
-
 		// build and create the tarball file
 		node_childProcess.execSync(
 			"bun run build && bun pm pack",
@@ -75,14 +65,18 @@ if(argv.tag.startsWith("v")) {
 			},
 		)
 
-		publishCommand.splice(
-			1,
-			0,
-			`./${pkg}-${packageJson.version}.tgz`,
-		)
+		let publishCommand =
+			"bunx npm publish"
+				+ ` ./${pkg}-${packageJson.version}.tgz`
+				+ " --access public"
+
+		const prereleaseTag = SemverPrerelease(argv.tag)
+		if(typeof prereleaseTag?.[0] == "string") {
+			publishCommand += ` --tag ${prereleaseTag[0]}`
+		}
 
 		node_childProcess.execSync(
-			publishCommand.join(" "),
+			publishCommand,
 			{
 				cwd: packageDir,
 				stdio: "inherit",
@@ -123,11 +117,6 @@ if(argv.tag.startsWith("v")) {
 		throw new Error(`Cannot publish ${packageName}@v${packageJson.version}, while using GIT tag ${argv.tag}.`)
 	}
 
-	const prereleaseTag = SemverPrerelease(version)
-	if(typeof prereleaseTag?.[0] == "string") {
-		publishCommand.push(`--tag ${prereleaseTag[0]}`)
-	}
-
 	// build and create the tarball file
 	node_childProcess.execSync(
 		"bun run build && bun pm pack",
@@ -137,14 +126,18 @@ if(argv.tag.startsWith("v")) {
 		},
 	)
 
-	publishCommand.splice(
-		1,
-		0,
-		`./${packageName}-${packageJson.version}.tgz`,
-	)
+	let publishCommand =
+		"bunx npm publish"
+			+ ` ./${packageName}-${packageJson.version}.tgz`
+			+ " --access public"
+
+	const prereleaseTag = SemverPrerelease(version)
+	if(typeof prereleaseTag?.[0] == "string") {
+		publishCommand += ` --tag ${prereleaseTag[0]}`
+	}
 
 	node_childProcess.execSync(
-		publishCommand.join(" "),
+		publishCommand,
 		{
 			cwd: packageDir,
 			stdio: "inherit",
