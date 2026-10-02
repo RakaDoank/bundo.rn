@@ -41,7 +41,6 @@ if(argv.tag.startsWith("v")) {
 		"bundo-appgen", // bundo-appgen has to be the first package
 		"bundo.rn",
 		"bundo-window",
-		"create-bundo-app",
 	]
 
 	for(const pkg of packages) {
