@@ -12,7 +12,7 @@ jobs:
     environment: release
     permissions:
       contents: write # For GitHub Release
-      id-token: write # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
+      id-token: write
     steps:
       - uses: actions/checkout@v6
       - name: Use Bun.js

@@ -28,11 +28,7 @@ const
 			})
 			.parseSync()
 
-/**
- * Currently, we are using `npm` for publishing,
- * until bun support the --provenance https://github.com/oven-sh/bun/issues/15601
- */
-let command = "bun run build && bunx npm publish --access public --provenance"
+let command = "bun run build && bun publish --access public"
 
 if(argv.tag.startsWith("v")) {
 	// bundo.rn
