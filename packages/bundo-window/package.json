@@ -1,6 +1,6 @@
 {
 	"name": "bundo-window",
-	"version": "0.0.1-beta.8",
+	"version": "0.0.1",
 	"description": "Manage your React Native app window",
 	"license": "MIT",
 	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
