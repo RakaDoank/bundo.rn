@@ -1,11 +1,11 @@
 # bundo.rn
 
-Manager of your React Native app project for native macOS + Windows.
+Manager of your React Native app project for native macOS.
 
-> This project is a Proof of Concept.
-
-> We are still on development and research, even Windows platform is not available yet.
+> This project is a Proof of Concept. We are still on development and research.
 > For a quick look, try `npx create-bundo-app` in your machine.
+
+> Windows platform support is also on development.
 
 ## Documentation
 

@@ -1,7 +1,7 @@
 {
 	"name": "bundo.rn",
-	"version": "0.0.1-beta.8",
-	"description": "Let's bundo manages your React Native app for macOS and Windows",
+	"version": "0.0.1",
+	"description": "Let's bundo manages your React Native app for macOS",
 	"license": "MIT",
 	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
 	"homepage": "https://github.com/RakaDoank/bundo.rn",
