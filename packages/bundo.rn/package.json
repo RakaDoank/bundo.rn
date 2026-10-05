@@ -1,6 +1,6 @@
 {
 	"name": "bundo.rn",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Let's bundo manages your React Native app for macOS",
 	"license": "MIT",
 	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
@@ -36,15 +36,14 @@
 		}
 	},
 	"peerDependencies": {
+		"bundo-appgen": "workspace:*",
 		"react-native-macos": "^0.81"
 	},
 	"devDependencies": {
 		"@babel/core": "^7",
-		"@babel/plugin-transform-export-namespace-from": "^7",
 		"@babel/preset-env": "^7",
 		"@babel/runtime": "^7",
 		"@react-native-community/cli": "^20",
-		"bundo-appgen": "workspace:*",
 		"yargs": "catalog:"
 	}
 }
