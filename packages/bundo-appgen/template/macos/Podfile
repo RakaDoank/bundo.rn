@@ -5,18 +5,34 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+require 'pathname'
+
+# Find the real "react-native-macos" path.
+react_native_macos_path = Pathname.new(
+  Pod::Executable.execute_command(
+    'node',
+    [
+      '-p',
+      'require.resolve("react-native-macos/package.json")',
+    ],
+  ).strip.gsub('/package.json', '')
+).relative_path_from(__dir__).to_path
+
 prepare_react_native_project!
 
 target 'HelloWorld' do
   platform :macos, '14.0'
 
+  # Do not use `config[:reactNativePath]` from here because,
+  # the `use_native_modules` def is still trying to find the "react-native" instead of "react-native-macos" path.
+  # We should fix this in "react-native-macos/scripts" Ruby script files.
   config = use_native_modules!
 
   # Flags change depending on the env values.
   flags = get_default_flags()
 
   use_react_native!(
-    :path => config[:reactNativePath].gsub("node_modules/react-native", "node_modules/react-native-macos"),
+    :path => react_native_macos_path,
     :fabric_enabled => true,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
@@ -25,7 +41,7 @@ target 'HelloWorld' do
   post_install do |installer|
     react_native_post_install(
       installer,
-      config[:reactNativePath],
+      react_native_macos_path,
       :mac_catalyst_enabled => false,
     )
   end
