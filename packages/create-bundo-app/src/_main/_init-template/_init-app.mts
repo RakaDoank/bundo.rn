@@ -1,7 +1,6 @@
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
-import BundoAppgenPackageJson from "../../../../bundo-appgen/package.json" with { type: "json" }
 import BundoWindowPackageJson from "../../../../bundo-window/package.json" with { type: "json" }
 import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
 
@@ -306,60 +305,15 @@ async function resolveDependenciesVersion(
 
 	if(!data.isMonorepo) {
 		const [
-			bundoAppgenVersion,
 			bundoWindowVersion,
 			bundoRnVersion,
 		] =
 			await Promise.all([
-				fetch("https://registry.npmjs.org/bundo-appgen/latest")
-					.then(async res => {
-						const json = await res.json() as {
-							version: string,
-						}
-						if(json && typeof json === "object" && typeof json?.version === "string") {
-							return json.version
-						}
-						throw new Error()
-					})
-					.catch(() => {
-						return BundoAppgenPackageJson.version // fallback
-					}),
-
-				fetch("https://registry.npmjs.org/bundo-window/latest")
-					.then(async res => {
-						const json = await res.json() as {
-							version: string,
-						}
-						if(json && typeof json === "object" && typeof json?.version === "string") {
-							return json.version
-						}
-						throw new Error()
-					})
-					.catch(() => {
-						return BundoWindowPackageJson.version // fallback
-					}),
-
-				fetch("https://registry.npmjs.org/bundo.rn/latest")
-					.then(async res => {
-						const json = await res.json() as {
-							version: string,
-						}
-						if(json && typeof json === "object" && typeof json?.version === "string") {
-							return json.version
-						}
-						throw new Error()
-					})
-					.catch(() => {
-						return BundoRnPackageJson.version // fallback
-					}),
+				getBundoWindowVersion(),
+				getBundoRnVersion(),
 			])
 
 		for(const [dependency, version] of Object.entries(data.dependencies)) {
-			if(dependency == "bundo-appgen") {
-				dependencies["bundo-appgen"] = bundoAppgenVersion
-				continue
-			}
-
 			if(dependency == "bundo-window") {
 				dependencies["bundo-window"] = bundoWindowVersion
 				continue
@@ -387,4 +341,52 @@ async function resolveDependenciesVersion(
 	}
 
 	return dependencies
+}
+
+let cacheBundoWindowVersion = ""
+async function getBundoWindowVersion(): Promise<string> {
+	if(cacheBundoWindowVersion) {
+		return cacheBundoWindowVersion
+	}
+
+	const ver = await fetch("https://registry.npmjs.org/bundo-window/latest")
+		.then(async res => {
+			const json = await res.json() as {
+				version: string,
+			}
+			if(json && typeof json === "object" && typeof json?.version === "string") {
+				return json.version
+			}
+			throw new Error()
+		})
+		.catch(() => {
+			return BundoWindowPackageJson.version // fallback
+		})
+
+	cacheBundoWindowVersion = ver
+	return ver
+}
+
+let cacheBundoRnVersion = ""
+async function getBundoRnVersion(): Promise<string> {
+	if(cacheBundoRnVersion) {
+		return cacheBundoRnVersion
+	}
+
+	const ver = await fetch("https://registry.npmjs.org/bundo.rn/latest")
+		.then(async res => {
+			const json = await res.json() as {
+				version: string,
+			}
+			if(json && typeof json === "object" && typeof json?.version === "string") {
+				return json.version
+			}
+			throw new Error()
+		})
+		.catch(() => {
+			return BundoRnPackageJson.version // fallback
+		})
+
+	cacheBundoRnVersion = ver
+	return ver
 }

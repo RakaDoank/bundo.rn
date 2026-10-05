@@ -57,21 +57,20 @@
     },
     "packages/bundo.rn": {
       "name": "bundo.rn",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "bin": {
         "bundo": "./bin.mjs",
         "bundo.rn": "./bin.mjs",
       },
       "devDependencies": {
         "@babel/core": "^7",
-        "@babel/plugin-transform-export-namespace-from": "^7",
         "@babel/preset-env": "^7",
         "@babel/runtime": "^7",
         "@react-native-community/cli": "^20",
-        "bundo-appgen": "workspace:*",
         "yargs": "catalog:",
       },
       "peerDependencies": {
+        "bundo-appgen": "workspace:*",
         "react-native-macos": "^0.81",
       },
     },

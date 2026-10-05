@@ -17,13 +17,13 @@
     "react-native-safe-area-context": "catalog:"
   },
   "devDependencies": {
+		"@babel/plugin-transform-export-namespace-from": "catalog:",
     "@react-native-community/cli": "catalog:",
     "@react-native/babel-preset": "0.81.6",
     "@react-native/metro-config": "0.81.6",
 		"@rnx-kit/metro-config": "catalog:",
 		"@rnx-kit/metro-resolver-symlinks": "catalog:",
-    "@types/react": "^19",
-    "bundo-appgen": "catalog:"
+    "@types/react": "^19"
   },
   "engines": {
     "bun": "^1",
