@@ -57,7 +57,7 @@
     },
     "packages/bundo.rn": {
       "name": "bundo.rn",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "bin": {
         "bundo": "./bin.mjs",
         "bundo.rn": "./bin.mjs",
@@ -76,7 +76,7 @@
     },
     "packages/create-bundo-app": {
       "name": "create-bundo-app",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "bin": "./lib/bin.mjs",
     },
     "playground/hello-bundo": {
