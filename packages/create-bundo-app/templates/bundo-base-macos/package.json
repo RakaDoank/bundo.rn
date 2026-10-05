@@ -9,6 +9,7 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "bundo-window": "catalog:",
     "bundo.rn": "catalog:",
     "react": "19.1.4",
     "react-native": "0.81.6",

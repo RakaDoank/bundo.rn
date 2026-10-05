@@ -9,6 +9,7 @@
     "windows": "react-native run-windows"
   },
   "dependencies": {
+    "bundo-window": "catalog:",
     "bundo.rn": "catalog:",
     "react": "19.2.8",
     "react-native": "0.84.1",

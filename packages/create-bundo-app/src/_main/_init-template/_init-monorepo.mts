@@ -2,6 +2,7 @@ import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
 import BundoAppgenPackageJson from "../../../../bundo-appgen/package.json" with { type: "json" }
+import BundoWindowPackageJson from "../../../../bundo-window/package.json" with { type: "json" }
 import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
 
 import {
@@ -113,6 +114,23 @@ export async function initMonorepo() {
 						return BundoAppgenPackageJson.version
 					}),
 
+			bundoWindowVersion =
+				await fetch(
+					"https://registry.npmjs.org/bundo-window/latest",
+				)
+					.then(async res => {
+						const json = await res.json() as {
+							version: string,
+						}
+						if(json && typeof json === "object" && typeof json?.version === "string") {
+							return json.version
+						}
+						throw new Error()
+					})
+					.catch(() => {
+						return BundoWindowPackageJson.version
+					}),
+
 			bundoRnVersion =
 				await fetch(
 					"https://registry.npmjs.org/bundo.rn/latest",
@@ -146,8 +164,9 @@ export async function initMonorepo() {
 				},
 			)
 
-			// change the bundo-appgen & bundo.rn catalog in the package.json
+			// change these package catalog version in the package.json
 			packageJson.workspaces.catalog["bundo-appgen"] = bundoAppgenVersion
+			packageJson.workspaces.catalog["bundo-window"] = bundoWindowVersion
 			packageJson.workspaces.catalog["bundo.rn"] = bundoRnVersion
 		} else {
 			// PNPM
@@ -170,9 +189,21 @@ export async function initMonorepo() {
 			// @ts-expect-error remove the "workspaces" property in the package.json
 			delete packageJson.workspaces
 
-			// change the bundo.rn catalog in the pnpm-workspace.yaml
+			// change these package catalog version in the pnpm-workspace.yaml
 			let pnpmWorkspace = node_fs.readFileSync(pnpmWorkspacePath, "utf8")
-			pnpmWorkspace = pnpmWorkspace.replace("- 'bundo.rn': $$", `- 'bundo.rn': ${bundoRnVersion}`)
+			pnpmWorkspace = pnpmWorkspace
+				.replace(
+					"- 'bundo-appgen': $$",
+					`- 'bundo-appgen': ${bundoAppgenVersion}`,
+				)
+				.replace(
+					"- 'bundo-window': $$",
+					`- 'bundo-window': ${bundoWindowVersion}`,
+				)
+				.replace(
+					"- 'bundo.rn': $$",
+					`- 'bundo.rn': ${bundoRnVersion}`,
+				)
 
 			node_fs.writeFileSync(pnpmWorkspacePath, pnpmWorkspace, "utf8")
 		}
