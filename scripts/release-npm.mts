@@ -59,7 +59,9 @@ if(argv.tag.startsWith("v")) {
 
 		// build and create the tarball file
 		node_childProcess.execSync(
-			"bun run build && bun pm pack",
+			packageJson.name == "bundo.rn"
+				? "bun run build --skip-build-bundo-appgen && bun pm pack"
+				: "bun run build && bun pm pack",
 			{
 				cwd: packageDir,
 				stdio: "inherit",

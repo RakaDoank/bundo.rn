@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as node_childProcess from "node:child_process"
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
@@ -7,7 +9,20 @@ import {
 	Glob,
 } from "bun"
 
+import yargs from "yargs"
+import * as YargsHelper from "yargs/helpers"
+
 const
+	argv =
+		yargs(YargsHelper.hideBin(process.argv))
+			.options({
+				"skip-build-bundo-appgen": {
+					type: "boolean",
+					description: "Skip build the bundo-appgen.",
+				},
+			})
+			.parseSync(),
+
 	paths =
 		(() => {
 			const
@@ -57,6 +72,18 @@ node_fs.rmSync(paths.lib.__dirname, { recursive: true, force: true })
 const childProcessExec = node_util.promisify(
 	node_childProcess.exec,
 )
+
+if(!argv["skip-build-bundo-appgen"]) {
+	node_childProcess.execSync(
+		"bun run build",
+		{
+			cwd: node_path.join(paths.root, "..", "bundo-appgen"),
+			stdio: "inherit",
+		},
+	)
+} else {
+	console.log("bundo-appgen building has been skipped.")
+}
 
 await Promise.all([
 
