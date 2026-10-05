@@ -25,6 +25,6 @@ export function isCompatible(): boolean {
 		return GlobalVars.argv.get().forceCrossPlatform
 	}
 
-	return false
+	return osCompatible
 
 }
