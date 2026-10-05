@@ -1,6 +1,6 @@
 {
 	"name": "bundo.rn",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Let's bundo manages your React Native app for macOS",
 	"license": "MIT",
 	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
@@ -32,7 +32,7 @@
 		"./appgen": {
 			"import": "./lib/module/subpaths/appgen/index.js",
 			"require": "./lib/commonjs/subpaths/appgen/index.js",
-			"types": "./lib/typescript/subpaths/appgen/index.d.ts"
+			"types": "./lib/typescript/subpaths/appgen/index.d.mts"
 		}
 	},
 	"peerDependencies": {
