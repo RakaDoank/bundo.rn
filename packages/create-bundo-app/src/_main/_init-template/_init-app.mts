@@ -1,6 +1,7 @@
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
+import BundoAppgenPackageJson from "../../../../bundo-appgen/package.json" with { type: "json" }
 import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
 
 import {
@@ -302,11 +303,9 @@ async function resolveDependenciesVersion(
 ): Promise<Record<string, string>> {
 	const dependencies: Record<string, string> = {}
 
-	for(const [dependency, version] of Object.entries(data.dependencies)) {
-		if(dependency == "bundo.rn") {
-			if(data.isMonorepo) {
-				dependencies["bundo.rn"] = "catalog:"
-			} else {
+	if(!data.isMonorepo) {
+		for(const [dependency, version] of Object.entries(data.dependencies)) {
+			if(dependency == "bundo.rn") {
 				const bundoRnVersion = await fetch(
 					"https://registry.npmjs.org/bundo.rn/latest",
 				)
@@ -320,16 +319,35 @@ async function resolveDependenciesVersion(
 						throw new Error()
 					})
 					.catch(() => {
-						return BundoRnPackageJson.version
+						return BundoRnPackageJson.version // fallback
 					})
 
 				dependencies["bundo.rn"] = bundoRnVersion
+				continue
 			}
-		} else {
-			if(
-				!data.isMonorepo &&
-				version == "catalog:"
-			) {
+
+			if(dependency == "bundo-appgen") {
+				const bundoAppgenVersion = await fetch(
+					"https://registry.npmjs.org/bundo-appgen/latest",
+				)
+					.then(async res => {
+						const json = await res.json() as {
+							version: string,
+						}
+						if(json && typeof json === "object" && typeof json?.version === "string") {
+							return json.version
+						}
+						throw new Error()
+					})
+					.catch(() => {
+						return BundoAppgenPackageJson.version // fallback
+					})
+
+				dependencies["bundo-appgen"] = bundoAppgenVersion
+				continue
+			}
+
+			if(version == "catalog:") {
 				// resolve the actual dependency versioning from the catalog package.json
 
 				const catalogVersion = (data.packageJsonMonorepoTemplate.workspaces.catalog as Record<string, string>)[dependency]
@@ -337,9 +355,11 @@ async function resolveDependenciesVersion(
 				if(catalogVersion) {
 					dependencies[dependency] = catalogVersion
 				}
-			} else {
-				dependencies[dependency] = version
 			}
+		}
+	} else {
+		for(const [dependency, version] of Object.entries(data.dependencies)) {
+			dependencies[dependency] = version
 		}
 	}
 

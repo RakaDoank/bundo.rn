@@ -1,8 +1,8 @@
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
+import BundoAppgenPackageJson from "../../../../bundo-appgen/package.json" with { type: "json" }
 import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
-import CreateBundoAppPackageJson from "../../../package.json" with { type: "json" }
 
 import {
 	GlobalVars,
@@ -96,10 +96,26 @@ export async function initMonorepo() {
 					),
 				) as typeof import("../../../templates/bundo-monorepo-project/package.json"),
 
+			bundoAppgenVersion =
+				await fetch(
+					"https://registry.npmjs.org/bundo-appgen/latest",
+				)
+					.then(async res => {
+						const json = await res.json() as {
+							version: string,
+						}
+						if(json && typeof json === "object" && typeof json?.version === "string") {
+							return json.version
+						}
+						throw new Error()
+					})
+					.catch(() => {
+						return BundoAppgenPackageJson.version
+					}),
+
 			bundoRnVersion =
 				await fetch(
-					"https://registry.npmjs.org/bundo.rn"
-						+ (CreateBundoAppPackageJson.version.includes("-beta.") ? "/beta" : "/latest"),
+					"https://registry.npmjs.org/bundo.rn/latest",
 				)
 					.then(async res => {
 						const json = await res.json() as {
@@ -115,7 +131,8 @@ export async function initMonorepo() {
 					})
 
 		if(packageManager == "bun") {
-			// Client wants to use Bun package manager
+			// Bun
+
 			node_fs.renameSync(
 				node_path.join(process.cwd(), "$$bunfig.toml"),
 				node_path.join(process.cwd(), "bunfig.toml"),
@@ -129,12 +146,14 @@ export async function initMonorepo() {
 				},
 			)
 
-			// change the bundo.rn catalog in the package.json
+			// change the bundo-appgen & bundo.rn catalog in the package.json
+			packageJson.workspaces.catalog["bundo-appgen"] = bundoAppgenVersion
 			packageJson.workspaces.catalog["bundo.rn"] = bundoRnVersion
 		} else {
+			// PNPM
+
 			const pnpmWorkspacePath = node_path.join(process.cwd(), "pnpm-workspace.yaml")
 
-			// Client wants to use pnpm
 			node_fs.renameSync(
 				node_path.join(process.cwd(), "$$pnpm-workspace.yaml"),
 				pnpmWorkspacePath,
