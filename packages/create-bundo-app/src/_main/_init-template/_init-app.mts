@@ -242,7 +242,7 @@ async function initFiles(
 			dependencies: Record<string, string> =
 				isMonorepo
 					? {
-						"app-ui": "workspace:",
+						"app-ui": "workspace:*",
 						...resolvedDependencies,
 					}
 					: resolvedDependencies,
