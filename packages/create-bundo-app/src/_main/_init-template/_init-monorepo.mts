@@ -175,11 +175,11 @@ export async function initMonorepo() {
 			pnpmWorkspace = pnpmWorkspace
 				.replace(
 					"- 'bundo-window': $$",
-					`- 'bundo-window': ${bundoWindowVersion}`,
+					`- 'bundo-window': ~${bundoWindowVersion}`,
 				)
 				.replace(
 					"- 'bundo.rn': $$",
-					`- 'bundo.rn': ${bundoRnVersion}`,
+					`- 'bundo.rn': ~${bundoRnVersion}`,
 				)
 
 			node_fs.writeFileSync(pnpmWorkspacePath, pnpmWorkspace, "utf8")

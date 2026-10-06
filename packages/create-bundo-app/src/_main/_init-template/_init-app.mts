@@ -315,12 +315,12 @@ async function resolveDependenciesVersion(
 
 		for(const [dependency, version] of Object.entries(data.dependencies)) {
 			if(dependency == "bundo-window") {
-				dependencies["bundo-window"] = bundoWindowVersion
+				dependencies["bundo-window"] = `~${bundoWindowVersion}`
 				continue
 			}
 
 			if(dependency == "bundo.rn") {
-				dependencies["bundo.rn"] = bundoRnVersion
+				dependencies["bundo.rn"] = `~${bundoRnVersion}`
 				continue
 			}
 
