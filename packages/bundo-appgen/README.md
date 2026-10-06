@@ -21,7 +21,7 @@ Generate native app project for React Native app host easily with a single JavaS
   - [CocoaPods](https://cocoapods.org) dependency manager
 - (Optional) [tsx](https://github.com/privatenumber/tsx) if you want to use TypeScript configuration for `bundo-appgen`
 
-Technically, you can use [Bun](https://github.com/oven-sh/bun), but `bundo-appgen` is depending on [Node.js Permission Model](https://nodejs.org/api/permissions.html) for `bundo-appgen` plugins. We may support for [Bun](https://github.com/over-sh/bun) fully until the permission model is supported. See [Bun #6617 issue](https://github.com/oven-sh/bun/issues/6617). You can still use [Bun](https://github.com/oven-sh/bun) for local app development later.
+Technically, you can use [Bun](https://github.com/oven-sh/bun), but `bundo-appgen` is depending on [Node.js Permission Model](https://nodejs.org/api/permissions.html) for `bundo-appgen` plugins. We may support for [Bun](https://github.com/over-sh/bun) fully until the permission model is supported. See [Bun #6617 issue](https://github.com/oven-sh/bun/issues/6617). You can still use [Bun](https://github.com/oven-sh/bun) for local app development.
 
 ## Installation
 
@@ -231,7 +231,7 @@ export default {
 } satisfies Config.Data
 ```
 
-`bundo-appgen` is currently supporting macOS. Right after we are sure that our appgen (App Generator) for macOS is fully-ready-stabily, `bundo-appgen` will support the Windows platform, because it is really our primary main focus initially.
+`bundo-appgen` is currently supporting macOS. Right after we are sure that our appgen (App Generator) for macOS is fully-ready-stabily, `bundo-appgen` will try to support the Windows platform, because it is really our primary main focus initially.
 
 For Android and iOS, it is better to use [Expo](https://github.com/expo/expo) right now. It provides variety of first party packages in its ecosystem.
 
