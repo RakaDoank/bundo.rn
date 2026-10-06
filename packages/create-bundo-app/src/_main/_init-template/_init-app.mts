@@ -26,12 +26,16 @@ export async function initApp() {
 		isWindows =
 			platform.includes("windows")
 
+	if(!isMacos && !isWindows) {
+		throw new Error(`Unexpected platform "${platform}" to proceed.`)
+	}
+
 	if(isMacos) {
 		await initFiles("macos", isMonorepoProject)
-	} else if(isWindows) {
+	}
+
+	if(isWindows) {
 		await initFiles("windows", isMonorepoProject)
-	} else {
-		throw new Error(`Unexpected platform ${platform} to proceed.`)
 	}
 
 }
