@@ -29,23 +29,29 @@ export async function main(
 	}
 
 	const
+		// We don't know we can support the Windows yet.
+		// I am still on research to support the Windows platform as good as the macOS's App Generator.
+		// At this moment, just use "macos". Users don't need to select a platform.
+
+		// platform =
+		// 	await Prompts.select({
+		// 		message: "Choose Platform",
+		// 		choices: [{
+		// 			value: "macos+windows",
+		// 			name: "macOS + Windows",
+		// 			disabled: "Windows is not ready yet",
+		// 		}, {
+		// 			value: "macos",
+		// 			name: "macOS",
+		// 		}, {
+		// 			value: "windows",
+		// 			name: "Windows",
+		// 			disabled: "Windows is not ready yet",
+		// 		}],
+		// 		default: "macos",
+		// 	}),
 		platform =
-			await Prompts.select({
-				message: "Choose Platform",
-				choices: [{
-					value: "macos+windows",
-					name: "macOS + Windows",
-					disabled: "Windows is not ready yet",
-				}, {
-					value: "macos",
-					name: "macOS",
-				}, {
-					value: "windows",
-					name: "Windows",
-					disabled: "Windows is not ready yet",
-				}],
-				default: "macos",
-			}),
+			"macos",
 
 		packageManager =
 			await Prompts.select({
@@ -62,9 +68,9 @@ export async function main(
 					name: "npm",
 					value: "npm",
 					description: "Use traditional npm in Node.js",
-					disabled: platform == "macos+windows"
-						? "We have to create separate app. \"react-native-macos\" and \"react-native-windows\" don't support the same upstream version of React Native."
-						: false,
+					// disabled: platform == "macos+windows"
+					// 	? "We have to create separate app. \"react-native-macos\" and \"react-native-windows\" don't support the same upstream version of React Native."
+					// 	: false,
 				}],
 			})
 
