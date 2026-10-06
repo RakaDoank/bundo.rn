@@ -25,7 +25,6 @@ target 'HelloWorld' do
 
   # Do not use `config[:reactNativePath]` from here because,
   # the `use_native_modules` def is still trying to find the "react-native" instead of "react-native-macos" path.
-  # We should fix this in "react-native-macos/scripts" Ruby script files.
   config = use_native_modules!
 
   # Flags change depending on the env values.
