@@ -18,6 +18,7 @@
 	"types": "./lib/typescript/index.d.mts",
 	"files": [
 		"bin.mjs",
+		"LICENSE",
 		"lib",
 		"src",
 		"template",

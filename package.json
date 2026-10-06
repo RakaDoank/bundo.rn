@@ -1,8 +1,9 @@
 {
 	"name": "bundo.rn",
-	"version": "0.0.0",
-	"private": true,
 	"description": "Let's bundo manages your React Native app for macOS and Windows",
+	"version": "0.0.0",
+	"license": "MIT",
+	"private": true,
 	"scripts": {
 		"code-check": "npm run type-check && npm run lint",
 		"lint": "eslint",
