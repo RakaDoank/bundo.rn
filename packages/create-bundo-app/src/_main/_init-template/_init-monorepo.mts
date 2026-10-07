@@ -1,6 +1,8 @@
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
+import * as Yaml from "yaml"
+
 import BundoWindowPackageJson from "../../../../bundo-window/package.json" with { type: "json" }
 import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
 
@@ -167,22 +169,40 @@ export async function initMonorepo() {
 				},
 			)
 
+			// Related changes in the pnpm-workspace.yaml
+			// by borrowing some fields from the package.json (Bun)
+			// - catalog
+			// - packages
+
+			const pnpmWorkspaceYaml = Yaml.parse(node_fs.readFileSync(pnpmWorkspacePath, "utf8")) as {
+				catalog: Record<string, string>,
+				packages: string[],
+			}
+
+			pnpmWorkspaceYaml.catalog = packageJson.workspaces.catalog
+			pnpmWorkspaceYaml.catalog["bundo-window"] = `~${bundoWindowVersion}`
+			pnpmWorkspaceYaml.catalog["bundo.rn"] = `~${bundoRnVersion}`
+
+			pnpmWorkspaceYaml.packages = packageJson.workspaces.packages
+
+			node_fs.writeFileSync(
+				pnpmWorkspacePath,
+				Yaml
+					.stringify(
+						pnpmWorkspaceYaml,
+						{
+							toStringDefaults: {
+								singleQuote: true,
+							},
+						},
+					)
+					.replace(/(^\w+:.*)(?!\n\s\s)/gm, "$1\n")
+					.replace(/(^\s+.*)(\n^\w+.*)/gm, "$1\n$2"),
+				"utf8",
+			)
+
 			// @ts-expect-error remove the "workspaces" property in the package.json
 			delete packageJson.workspaces
-
-			// change these package catalog version in the pnpm-workspace.yaml
-			let pnpmWorkspace = node_fs.readFileSync(pnpmWorkspacePath, "utf8")
-			pnpmWorkspace = pnpmWorkspace
-				.replace(
-					"- 'bundo-window': $$",
-					`- 'bundo-window': ~${bundoWindowVersion}`,
-				)
-				.replace(
-					"- 'bundo.rn': $$",
-					`- 'bundo.rn': ~${bundoRnVersion}`,
-				)
-
-			node_fs.writeFileSync(pnpmWorkspacePath, pnpmWorkspace, "utf8")
 		}
 
 		// rewrite it
