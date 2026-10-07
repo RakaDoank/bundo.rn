@@ -59,11 +59,11 @@ export async function main(
 				choices: [{
 					value: "bun",
 					name: "Bun",
-					description: "Use Bun package manager",
+					description: "A superfast npm-compatible package manager",
 				}, {
 					value: "pnpm",
 					name: "pnpm",
-					description: "Manage dependencies with pnpm",
+					description: "Fast, disk space efficient package manager",
 				}, {
 					name: "npm",
 					value: "npm",
@@ -125,7 +125,7 @@ Getting Started:
 		console.log(`
 Getting Started:
 
-1. Run \`${packageManager} install\` to install all the JavaScript dependencies
+1. Run \`${packageManager} install${packageManager == "npm" ? " --force" : ""}\` to install all the JavaScript dependencies
 
 2. Provide your app name in the bundo.config.mjs
 
