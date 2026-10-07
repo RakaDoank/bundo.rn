@@ -4,6 +4,7 @@
     "composite": true
   },
   "include": [
+    "./babel.config.js",
     "./bundo.config.{js,mjs,ts,mts}",
     "./metro.config.js"
   ]
