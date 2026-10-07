@@ -38,10 +38,48 @@ export async function initMonorepo() {
 	)
 
 	// $$eslint.config.mjs
-	node_fs.renameSync(
-		node_path.join(process.cwd(), "$$eslint.config.mjs"),
-		node_path.join(process.cwd(), "eslint.config.mjs"),
-	)
+	{
+		const
+			eslintConfigTemplatePath =
+				node_path.join(process.cwd(), "$$eslint.config.mjs"),
+
+			eslintConfigPath =
+				node_path.join(process.cwd(), "eslint.config.mjs")
+
+		let eslintConfigFile = node_fs.readFileSync(eslintConfigTemplatePath, "utf8")
+
+		const
+			reactAndReactNativeFiles =
+				"$1\"./apps/*/index.js\",\n"
+				+ "$1\"./apps/*/src/**/*.{ts,tsx,js,jsx}\",\n"
+				+ "$1\"./packages/*/src/**/*.{ts,tsx,js,jsx}\",",
+
+			nodeFiles =
+				"$1\"./apps/*/*.config.{js,mjs,ts,mts}\",\n"
+				+ "$1\"./packages/*/scripts/*.{js,mjs,ts,mts}\",\n"
+				+ "$1\"./scripts/**/*.{js,mjs,ts,mts}\","
+
+		eslintConfigFile = eslintConfigFile
+			.replace(
+				/^(\s+)\/\/\s\$\$react_and_react_native_files/,
+				reactAndReactNativeFiles,
+			)
+			.replace(
+				/^(\s+)\/\/\s\$\$node_files/,
+				nodeFiles,
+			)
+
+		node_fs.writeFileSync(
+			eslintConfigPath,
+			eslintConfigFile,
+			"utf8",
+		)
+
+		node_fs.rmSync(
+			eslintConfigTemplatePath,
+			{ force: true },
+		)
+	}
 
 	// $$tsconfg.json
 	{

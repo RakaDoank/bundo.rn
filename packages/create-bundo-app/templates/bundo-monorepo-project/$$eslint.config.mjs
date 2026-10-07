@@ -330,8 +330,7 @@ export default EslintConfig.defineConfig([
     // React and React Native files
 
     files: [
-      "./apps/*/src/**/*.{ts,tsx,jsx}",
-      "./packages/*/src/**/*.{ts,tsx,jsx}",
+      // $$react_and_react_native_files
     ],
     settings: {
       react: {
@@ -372,8 +371,7 @@ export default EslintConfig.defineConfig([
     // Development runtime related files, such as Node.js
 
     files: [
-      "./apps/*/*.config.{js,mjs,ts,mts}",
-      "./scripts/**/*.{js,mjs,ts,mts}",
+      // $$node_files
     ],
     languageOptions: {
       globals: Globals.node,

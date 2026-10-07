@@ -193,6 +193,60 @@ async function initFiles(
 		)
 	}
 
+	// eslint.config.mjs
+	{
+		// Borrow the eslint file from our template monorepo file
+
+		const
+			eslintConfigTemplatePath =
+				node_path.join(templatesDir, "bundo-monorepo-project", "$$eslint.config.mjs"),
+
+			eslintConfigPath =
+				node_path.join(process.cwd(), "eslint.config.mjs")
+
+		let
+			eslintConfigFile =
+				node_fs.readFileSync(eslintConfigTemplatePath, "utf8"),
+
+			reactAndReactNativeLintFiles: string,
+
+			nodeLintFiles: string
+
+		if(isMonorepo) {
+			reactAndReactNativeLintFiles =
+				"$1\"./apps/*/src/**/*.{ts,tsx,js,jsx}\",\n"
+				+ "$1\"./packages/*/src/**/*.{ts,tsx,js,jsx}\","
+
+			nodeLintFiles =
+				"$1\"./apps/*/*.config.{js,mjs,ts,mts}\",\n"
+				+ "$1\"./scripts/**/*.{js,mjs,ts,mts}\","
+		} else {
+			reactAndReactNativeLintFiles =
+				"$1\"./index.js\",\n"
+				+ "$1\"./src/**/*.{ts,tsx,js,jsx}\","
+
+			nodeLintFiles =
+				"$1\"./*.config.{js,mjs,ts,mts}\",\n"
+				+ "$1\"./scripts/**/*.{js,mjs,ts,mts}\","
+		}
+
+		eslintConfigFile = eslintConfigFile
+			.replace(
+				/^(\s+)\/\/\s\$\$react_and_react_native_files/m,
+				reactAndReactNativeLintFiles,
+			)
+			.replace(
+				/^(\s+)\/\/\s\$\$node_files/m,
+				nodeLintFiles,
+			)
+
+		node_fs.writeFileSync(
+			eslintConfigPath,
+			eslintConfigFile,
+			"utf8",
+		)
+	}
+
 	// $$.gitignore
 	node_fs.renameSync(
 		node_path.join(appDir, "$$.gitignore"),
@@ -215,9 +269,6 @@ async function initFiles(
 			packageJsonTemplatePath =
 				node_path.join(templatesDir, `bundo-base-${platform}`, "package.json"),
 
-			packageJsonPath =
-				node_path.join(appDir, "package.json"),
-
 			packageJson =
 				JSON.parse(
 					node_fs.readFileSync(
@@ -238,11 +289,12 @@ async function initFiles(
 				) as typeof import("../../../templates/bundo-monorepo-project/package.json"),
 
 			resolvedDependencies =
-				await resolveDependenciesVersion({
-					dependencies: packageJson.dependencies,
-					isMonorepo: !!isMonorepo,
-					packageJsonMonorepoTemplate,
-				}),
+				!isMonorepo
+					? await resolveDependenciesSemverAsSinglePackage({
+						dependencies: packageJson.dependencies,
+						packageJsonMonorepoTemplate,
+					})
+					: packageJson.dependencies as Record<string, string>,
 
 			dependencies: Record<string, string> =
 				isMonorepo
@@ -250,20 +302,34 @@ async function initFiles(
 						"app-ui": "workspace:*",
 						...resolvedDependencies,
 					}
-					: resolvedDependencies,
-
-			devDependencies: Record<string, string> =
-				await resolveDependenciesVersion({
-					dependencies: packageJson.devDependencies,
-					isMonorepo: !!isMonorepo,
-					packageJsonMonorepoTemplate,
-				})
+					: resolvedDependencies
 
 		packageJson.dependencies = dependencies as typeof packageJson.dependencies
-		packageJson.devDependencies = devDependencies as typeof packageJson.devDependencies
+
+		if(!isMonorepo) {
+			packageJson.devDependencies =
+				Object
+					.entries({
+						...(
+							await resolveDependenciesSemverAsSinglePackage({
+								dependencies: packageJson.devDependencies,
+								packageJsonMonorepoTemplate,
+							}) as typeof packageJson.devDependencies
+						),
+
+						// borrow some devDependencies from monorepo package.json
+						// e.g. "eslint"
+						...packageJsonMonorepoTemplate.devDependencies,
+					})
+					.sort()
+					.reduce<Record<string, string>>((obj, [dependency, version]) => {
+						obj[dependency] = version
+						return obj
+					}, {}) as typeof packageJson.devDependencies
+		}
 
 		node_fs.writeFileSync(
-			packageJsonPath,
+			node_path.join(appDir, "package.json"),
 			JSON.stringify(packageJson, null, 2),
 			"utf8",
 		)
@@ -298,47 +364,44 @@ async function initFiles(
 	}
 }
 
-async function resolveDependenciesVersion(
+async function resolveDependenciesSemverAsSinglePackage(
 	data: {
 		dependencies: Record<string, string>,
-		isMonorepo: boolean,
 		packageJsonMonorepoTemplate: typeof import("../../../templates/bundo-monorepo-project/package.json"),
 	},
 ): Promise<Record<string, string>> {
-	const dependencies: Record<string, string> = data.isMonorepo
-		? data.dependencies // nothing to modify
-		: {}
+	const dependencies: Record<string, string> = {}
 
-	if(!data.isMonorepo) {
-		const [
-			bundoWindowVersion,
-			bundoRnVersion,
-		] =
-			await Promise.all([
-				getBundoWindowVersion(),
-				getBundoRnVersion(),
-			])
+	const [
+		bundoWindowVersion,
+		bundoRnVersion,
+	] =
+		await Promise.all([
+			getBundoWindowVersion(),
+			getBundoRnVersion(),
+		])
 
-		for(const [dependency, version] of Object.entries(data.dependencies)) {
-			if(dependency == "bundo-window") {
-				dependencies["bundo-window"] = `~${bundoWindowVersion}`
-				continue
+	for(const [dependency, version] of Object.entries(data.dependencies)) {
+		if(dependency == "bundo-window") {
+			dependencies["bundo-window"] = `~${bundoWindowVersion}`
+			continue
+		}
+
+		if(dependency == "bundo.rn") {
+			dependencies["bundo.rn"] = `~${bundoRnVersion}`
+			continue
+		}
+
+		if(version == "catalog:") {
+			// resolve the actual dependency versioning from the catalog package.json
+
+			const catalogVersion = (data.packageJsonMonorepoTemplate.workspaces.catalog as Record<string, string>)[dependency]
+
+			if(catalogVersion) {
+				dependencies[dependency] = catalogVersion
 			}
-
-			if(dependency == "bundo.rn") {
-				dependencies["bundo.rn"] = `~${bundoRnVersion}`
-				continue
-			}
-
-			if(version == "catalog:") {
-				// resolve the actual dependency versioning from the catalog package.json
-
-				const catalogVersion = (data.packageJsonMonorepoTemplate.workspaces.catalog as Record<string, string>)[dependency]
-
-				if(catalogVersion) {
-					dependencies[dependency] = catalogVersion
-				}
-			}
+		} else {
+			dependencies[dependency] = version
 		}
 	}
 
