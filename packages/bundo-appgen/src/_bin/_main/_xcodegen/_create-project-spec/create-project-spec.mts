@@ -198,6 +198,9 @@ export function createProjectSpec(
 				},
 
 				options: {
+					...(appleData.locales?.[0] ? {
+						developmentLanguage: appleData.locales[0],
+					} : undefined),
 					useBaseInternationalization: false,
 				},
 
