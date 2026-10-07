@@ -15,7 +15,7 @@
       "@rnx-kit/metro-resolver-symlinks": "0.3.2",
       "bundo-window": "$$",
       "bundo.rn": "$$",
-      "react-native-safe-area-context": "5.10.0"
+      "react-native-safe-area-context": "5.10.1"
     },
     "packages": [
       "apps/*",
@@ -40,7 +40,7 @@
     "typescript-eslint": "8.70.1"
   },
   "engines": {
-    "bun": ">=1.4.x",
+    "bun": ">=1",
     "node": ">=22",
     "pnpm": ">=11"
   }
