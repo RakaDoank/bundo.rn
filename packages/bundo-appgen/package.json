@@ -10,6 +10,16 @@
 		"url": "https://github.com/RakaDoank/bundo.rn.git",
 		"directory": "packages/bundo-appgen"
 	},
+	"keywords": [
+		"bundo",
+		"bundo.rn",
+		"react",
+		"react-native",
+		"react-native-macos",
+		"macos",
+		"app generator",
+		"cross-platform"
+	],
 	"scripts": {
 		"build": "bun ./_scripts/build.mts",
 		"build-types": "bunx tsc --project ./tsconfig.build-types.json"

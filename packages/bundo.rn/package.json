@@ -10,6 +10,15 @@
 		"url": "https://github.com/RakaDoank/bundo.rn.git",
 		"directory": "packages/bundo.rn"
 	},
+	"keywords": [
+		"bundo",
+		"bundo.rn",
+		"react",
+		"react-native",
+		"react-native-macos",
+		"macos",
+		"cross-platform"
+	],
 	"scripts": {
 		"build": "bun ./_scripts/build.mts"
 	},
