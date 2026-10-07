@@ -2,7 +2,7 @@
   "name": "hello-world",
   "private": true,
   "version": "0.0.0",
-  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt est in quam dapibus, at tincidunt dui pharetra.",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   "scripts": {
     "lint": "eslint",
     "type-check": "tsc --build"

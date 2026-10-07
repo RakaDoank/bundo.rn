@@ -2,7 +2,7 @@
   "name": "windows-app",
   "version": "0.0.0",
   "private": true,
-  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt est in quam dapibus, at tincidunt dui pharetra.",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   "scripts": {
     "appgen": "bundo.rn appgen",
 		"start": "react-native start",
