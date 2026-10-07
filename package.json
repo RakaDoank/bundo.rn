@@ -48,7 +48,8 @@
 		"semver": "^7.8.5",
 		"tsx": "4.23.15",
 		"typescript": "6.0.3",
-		"typescript-eslint": "8.70.1"
+		"typescript-eslint": "8.70.1",
+		"yaml": "2.9.1"
 	},
 	"engines": {
 		"bun": "^1.4.x",
