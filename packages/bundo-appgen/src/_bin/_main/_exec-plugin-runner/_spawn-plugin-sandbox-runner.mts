@@ -71,8 +71,9 @@ export async function spawnPluginSandboxRunner(
 
 			if(lstat.isSymbolicLink()) {
 				nodeArgs.push(`--allow-fs-read=${node_fs.realpathSync(pluginDirectory)}`)
+			} else {
+				nodeArgs.push(`--allow-fs-read=${pluginDirectory}`)
 			}
-			nodeArgs.push(`--allow-fs-read=${pluginDirectory}`)
 		})
 
 		// exec plugin-sandbox-runner.mjs
