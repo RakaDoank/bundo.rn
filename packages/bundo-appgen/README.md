@@ -158,11 +158,9 @@ The target name ("HelloWorld") is the .xcworkspace folder name without the .xcwo
 
 We want to wrap a native project as a React Native app host easily without hurting so much times by touching the native code or native platform tooling e.g. changing app icon, app metadata, touching native C++, Swift & Objective-C code for upgrading React Native, etc.
 
-This package is heavily inspired by the [Expo Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation). Expo does a heavy lifting, and can make developers focus more on providing and delivering the actual product.
+This package is heavily inspired by the [Expo Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation). Expo does a heavy lifting that make developers focus more on providing and delivering the actual product.
 
-`bundo-appgen` also wants to get the same experience like Expo, but the main differentiation from Expo is **keeping each platform configurations separated**, instead of merging the configuration data in a single object configuration. We choose to do this way because it is too difficult to support other platforms such as macOS, and other platforms in a single object. What we mean a single object is `bundo-appgen` provides a configuration for macOS and Windows not within the same kind of data or field, instead `bundo-appgen` provides platform configurations individually. This is much easier for prototyping the native app project because each platform have some unique configurations that other platforms don't have, and we can follow each platform requirements much easier.
-
-For an example, you can see a configuration file example below
+`bundo-appgen` also wants to get the same experience like Expo, but `bundo-appgen` is supporting the macOS (and Windows probably in the future) that Expo does not want to, not creating another layer for native module e.g. Expo Modules, and [sanboxed plugin](#sandboxed-plugin) for security reasons. Another differentiation is `bundo-appgen` providing bare platform configurations as much as possible and keeping each platform configurations separated. This is much easier for prototyping the native app project because each platform have some unique configurations that other platforms don't have, and we can follow each platform requirements much easier. For an example, you can see a configuration file example below
 
 ```ts
 import {
@@ -222,7 +220,7 @@ export default {
     // later
   },
 
-  android: {
+  visionos: {
     // later
   },
 
@@ -231,7 +229,7 @@ export default {
 } satisfies Config.Data
 ```
 
-`bundo-appgen` is currently supporting macOS. Right after we are sure that our appgen (App Generator) for macOS is fully-ready-stabily, `bundo-appgen` will try to support the Windows platform, because it is really our primary main focus initially.
+`bundo-appgen` is currently supporting macOS. Right after we are sure that our appgen (App Generator) for macOS is fully-ready-stabily, `bundo-appgen` will try to support the Windows platform, because it is really this project main plan at the time.
 
 For Android and iOS, it is better to use [Expo](https://github.com/expo/expo) right now. It provides variety of first party packages in its ecosystem.
 
