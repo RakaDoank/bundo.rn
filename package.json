@@ -19,7 +19,8 @@
 		},
 		"packages": [
 			"packages/*",
-			"playground/*"
+			"playground/*",
+			"!playground/create-bundo-app"
 		]
 	},
 	"devDependencies": {
