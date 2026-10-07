@@ -46,7 +46,7 @@ import {
  * 
  * - Init template directory
  * 	- Copy the directory
- * 	- Modify template regarding project name and other config related
+ * 	- Modify the template file such as AppDelegate.swift regarding the project name and other configs related
  *  - (Apple)
  * 		- Init Asset Catalogs from Config
  *  - (Windows): TODO
@@ -140,6 +140,8 @@ export async function main() {
 			},
 		},
 	)
+
+	console.log("\x1b[1m\x1b[32m✔ Native project has been generated successfully.\x1b[0m")
 
 }
 
