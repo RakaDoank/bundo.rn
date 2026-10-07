@@ -10,9 +10,13 @@ import SemverValid from "semver/functions/valid.js"
 import yargs from "yargs"
 import * as YargsHelper from "yargs/helpers"
 
+import {
+	packPackage,
+} from "./_pack-package.mts"
+
 const
 	rootDir =
-		node_path.join(import.meta.dirname, ".."),
+		node_path.join(import.meta.dirname, "..", ".."),
 
 	argv =
 		yargs(YargsHelper.hideBin(process.argv))
@@ -50,7 +54,7 @@ if(argv.tag.startsWith("v")) {
 						node_path.join(packageDir, "package.json"),
 						"utf8",
 					),
-				) as typeof import("../package.json") // just for the schema/definition
+				) as typeof import("../../package.json") // just for the schema/definition
 
 		// check if the version from the tag is same from the packageJson.version
 		if(`v${packageJson.version}` !== argv.tag) {
@@ -60,17 +64,23 @@ if(argv.tag.startsWith("v")) {
 		// build and create the tarball file
 		node_childProcess.execSync(
 			packageJson.name == "bundo.rn"
-				? "bun run build --skip-build-bundo-appgen && bun pm pack"
-				: "bun run build && bun pm pack",
+				? "bun run build --skip-build-bundo-appgen"
+				: "bun run build",
 			{
 				cwd: packageDir,
 				stdio: "inherit",
 			},
 		)
 
+		const tarballFilename = packPackage({
+			rootDir,
+			packageName: pkg,
+			packageVersion: packageJson.version,
+		})
+
 		let publishCommand =
 			"bunx npm publish"
-				+ ` ./${pkg}-${packageJson.version}.tgz`
+				+ ` ./${tarballFilename}`
 				+ " --access public"
 
 		const prereleaseTag = SemverPrerelease(argv.tag)
@@ -118,7 +128,7 @@ if(argv.tag.startsWith("v")) {
 					node_path.join(packageDir, "package.json"),
 					"utf8",
 				),
-			) as typeof import("../package.json") // just for the schema/definition
+			) as typeof import("../../package.json") // just for the schema/definition
 
 	if(!node_fs.existsSync(packageDir)) {
 		throw new Error(`${packageName} was not found in the packages.`)
@@ -128,18 +138,24 @@ if(argv.tag.startsWith("v")) {
 		throw new Error(`Cannot publish ${packageName}@${packageJson.version}, while using GIT tag ${argv.tag}.`)
 	}
 
-	// build and create the tarball file
+	// Bob
 	node_childProcess.execSync(
-		"bun run build && bun pm pack",
+		"bun run build",
 		{
 			cwd: packageDir,
 			stdio: "inherit",
 		},
 	)
 
+	const tarballFilename = packPackage({
+		rootDir,
+		packageName,
+		packageVersion: packageJson.version,
+	})
+
 	let publishCommand =
 		"bunx npm publish"
-			+ ` ./${packageName}-${packageJson.version}.tgz`
+			+ ` ./${tarballFilename}`
 			+ " --access public"
 
 	const prereleaseTag = SemverPrerelease(version)
