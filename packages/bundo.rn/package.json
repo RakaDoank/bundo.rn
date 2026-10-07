@@ -47,7 +47,7 @@
 	},
 	"peerDependencies": {
 		"bundo-appgen": "workspace:~",
-		"react-native-macos": "^0.81"
+		"react-native-macos": "^0.81 || ^0.83"
 	},
 	"devDependencies": {
 		"@babel/core": "^7",

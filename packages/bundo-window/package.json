@@ -14,7 +14,7 @@
 		"build": "bun ./_scripts/build.mts"
 	},
 	"peerDependencies": {
-		"react-native-macos": "^0.81"
+		"bundo-appgen": "workspace:~"
 	},
 	"files": [
 		"android",

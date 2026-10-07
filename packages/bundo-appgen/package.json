@@ -45,7 +45,7 @@
 		}
 	},
 	"peerDependencies": {
-		"react-native-macos": "^0.81"
+		"react-native-macos": "^0.81 || ^0.83"
 	},
 	"devDependencies": {
 		"typescript": ">=6 <=7",
