@@ -1,6 +1,6 @@
 {
 	"name": "bundo-appgen",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"description": "App generator CLI for React Native macOS",
 	"license": "MIT",
 	"author": "RakaDoank <rakaaudira@gmail.com> (https://github.com/RakaDoank)",
