@@ -31,11 +31,12 @@
         "tsx": "4.23.15",
         "typescript": "6.0.3",
         "typescript-eslint": "8.70.1",
+        "yaml": "2.9.1",
       },
     },
     "packages/bundo-appgen": {
       "name": "bundo-appgen",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "bin": "./bin.mjs",
       "devDependencies": {
         "typescript": ">=6 <=7",
@@ -50,14 +51,14 @@
     },
     "packages/bundo-window": {
       "name": "bundo-window",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "peerDependencies": {
         "react-native-macos": "^0.81",
       },
     },
     "packages/bundo.rn": {
       "name": "bundo.rn",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "bin": {
         "bundo": "./bin.mjs",
         "bundo.rn": "./bin.mjs",
@@ -70,13 +71,13 @@
         "yargs": "catalog:",
       },
       "peerDependencies": {
-        "bundo-appgen": "workspace:*",
+        "bundo-appgen": "workspace:~",
         "react-native-macos": "^0.81",
       },
     },
     "packages/create-bundo-app": {
       "name": "create-bundo-app",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "bin": "./lib/bin.mjs",
     },
     "playground/hello-bundo": {
@@ -92,7 +93,7 @@
         "react": "19.1.4",
         "react-native": "0.81.6",
         "react-native-macos": "0.81.9",
-        "react-native-safe-area-context": "5.10.0",
+        "react-native-safe-area-context": "5.10.1",
       },
       "devDependencies": {
         "@react-native/babel-preset": "0.81.6",
@@ -1596,7 +1597,7 @@
 
     "react-native-macos": ["react-native-macos@0.81.9", "", { "dependencies": { "@jest/create-cache-key-function": "^29.7.0", "@react-native-macos/virtualized-lists": "0.81.9", "@react-native/assets-registry": "0.81.6", "@react-native/codegen": "0.81.6", "@react-native/community-cli-plugin": "0.81.6", "@react-native/gradle-plugin": "0.81.6", "@react-native/js-polyfills": "0.81.6", "@react-native/normalize-colors": "0.81.6", "abort-controller": "^3.0.0", "anser": "^1.4.9", "ansi-regex": "^5.0.0", "babel-jest": "^29.7.0", "babel-plugin-syntax-hermes-parser": "0.29.1", "base64-js": "^1.5.1", "commander": "^12.0.0", "flow-enums-runtime": "^0.0.6", "glob": "^7.1.1", "invariant": "^2.2.4", "jest-environment-node": "^29.7.0", "memoize-one": "^5.0.0", "metro-runtime": "^0.83.1", "metro-source-map": "^0.83.1", "nullthrows": "^1.1.1", "pretty-format": "^29.7.0", "promise": "^8.3.0", "react-devtools-core": "^6.1.5", "react-refresh": "^0.14.0", "regenerator-runtime": "^0.13.2", "scheduler": "0.26.0", "semver": "^7.1.3", "stacktrace-parser": "^0.1.10", "whatwg-fetch": "^3.0.0", "ws": "^6.2.3", "yargs": "^17.6.2" }, "peerDependencies": { "@types/react": "^19.1.4", "react": "^19.1.4", "react-native": "0.81.6" }, "optionalPeers": ["@types/react"], "bin": { "react-native": "cli.js", "react-native-macos": "cli.js" } }, "sha512-MG120BR4dFzH6v4IBhd4TZILTPvf4oUJHEM0y4ZedXUcGJqUYPIvBzLjPZddl/J3TMZzPaF0heLO3wXJoxqDLw=="],
 
-    "react-native-safe-area-context": ["react-native-safe-area-context@5.10.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-U655+G0KItefqpTKZenr0aBNulY/49TUKSZkWGVtESlFK5qmML7BejQjPDCRU+GzC24g2KeWFJguWP5LR52dqA=="],
+    "react-native-safe-area-context": ["react-native-safe-area-context@5.10.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-ax0T3cAHQIhuAjDQpJ9C1Le96aRiM9PF+Kmgg7Y8+mD7QJMEIx04cG0eG3EGUTdvymgOkCrkakgZFwuOIuNQGw=="],
 
     "react-native-svg": ["react-native-svg@15.15.5", "", { "dependencies": { "css-select": "^5.1.0", "css-tree": "^1.1.3" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-L4go5jA+GWutdJ/JucuN20cjAbMg1HmMtAP+wZ+3JLCf6Jd0bhXQHxciRP/AQm/FlrIEZwkMcHNZP+FXAiic0w=="],
 
