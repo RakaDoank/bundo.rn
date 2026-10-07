@@ -26,7 +26,7 @@
     "@types/react": "^19"
   },
   "engines": {
-    "bun": ">=1.4.x",
+    "bun": "^1",
     "node": ">=22",
     "pnpm": ">=11"
   }
