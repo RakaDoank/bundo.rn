@@ -1,9 +1,9 @@
 catalog:
-  - '@rnx-kit/metro-config': 2.2.5
-  - '@rnx-kit/metro-resolver-symlinks': 0.3.2
-  - 'bundo-window': $$
-  - 'bundo.rn': $$
-  - 'react-native-safe-area-context': 5.10.0
+  '@rnx-kit/metro-config': 2.2.5
+  '@rnx-kit/metro-resolver-symlinks': 0.3.2
+  'bundo-window': $$
+  'bundo.rn': $$
+  'react-native-safe-area-context': 5.10.0
 
 engineStrict: true
 
