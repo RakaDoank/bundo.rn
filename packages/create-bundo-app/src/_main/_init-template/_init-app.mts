@@ -305,7 +305,9 @@ async function resolveDependenciesVersion(
 		packageJsonMonorepoTemplate: typeof import("../../../templates/bundo-monorepo-project/package.json"),
 	},
 ): Promise<Record<string, string>> {
-	const dependencies: Record<string, string> = {}
+	const dependencies: Record<string, string> = data.isMonorepo
+		? data.dependencies // nothing to modify
+		: {}
 
 	if(!data.isMonorepo) {
 		const [
@@ -337,10 +339,6 @@ async function resolveDependenciesVersion(
 					dependencies[dependency] = catalogVersion
 				}
 			}
-		}
-	} else {
-		for(const [dependency, version] of Object.entries(data.dependencies)) {
-			dependencies[dependency] = version
 		}
 	}
 
