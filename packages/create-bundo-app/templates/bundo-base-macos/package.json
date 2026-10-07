@@ -11,16 +11,16 @@
   "dependencies": {
     "bundo-window": "catalog:",
     "bundo.rn": "catalog:",
-    "react": "19.1.4",
-    "react-native": "0.81.6",
-    "react-native-macos": "0.81.9",
+    "react": "19.2.0",
+    "react-native": "0.83.0",
+    "react-native-macos": "0.83.0",
     "react-native-safe-area-context": "catalog:"
   },
   "devDependencies": {
 		"@babel/plugin-transform-export-namespace-from": "catalog:",
     "@react-native-community/cli": "catalog:",
-    "@react-native/babel-preset": "0.81.6",
-    "@react-native/metro-config": "0.81.6",
+    "@react-native/babel-preset": "0.83.0",
+    "@react-native/metro-config": "0.83.0",
 		"@rnx-kit/metro-config": "catalog:",
 		"@rnx-kit/metro-resolver-symlinks": "catalog:",
     "@types/react": "^19"
