@@ -23,8 +23,27 @@ export async function main(
 			),
 		)
 	) {
-		console.log("Create Bundo App has been canceled.")
+		console.log("Create Bundo App has been cancelled.")
 		console.log("\x1b[31mCurrent working directory is not empty.\x1b[0m")
+		return
+	}
+
+	const
+		confirmDirectory =
+			await Prompts.select({
+				message: "Are you sure you want to create a project in this directory?",
+				choices: [{
+					value: 0,
+					name: "No",
+				}, {
+					value: 1,
+					name: `Yes — package.json and other files will be created in ${process.cwd()}`,
+					short: "Yes",
+				}],
+			})
+
+	if(!confirmDirectory) {
+		console.log("Create Bundo App has been cancelled.")
 		return
 	}
 
@@ -58,65 +77,49 @@ export async function main(
 				message: "Package Manager",
 				choices: [{
 					value: "bun",
-					name: "Bun",
-					description: "A superfast npm-compatible package manager",
+					name: "Bun — A superfast npm-compatible package manager",
+					short: "Bun",
 				}, {
 					value: "pnpm",
-					name: "pnpm",
-					description: "Fast, disk space efficient package manager",
+					name: "pnpm — Fast, disk space efficient package manager",
+					short: "pnpm",
 				}, {
-					name: "npm",
 					value: "npm",
-					description: "Use traditional npm in Node.js",
-					// disabled: platform == "macos+windows"
-					// 	? "We have to create separate app. \"react-native-macos\" and \"react-native-windows\" don't support the same upstream version of React Native."
-					// 	: false,
+					name: "npm — Use traditional npm in Node.js",
+					short: "npm",
 				}],
 			})
-
-	const
-		confirmDirectory =
-			await Prompts.confirm({
-				message: `Are you sure you want to create the project in this directory? \`package.json\` and other files will be created in ${process.cwd()}`,
-				default: true,
-			})
-
-	if(!confirmDirectory) {
-		console.log("Create Bundo App has been canceled.")
-		return
-	}
 
 	GlobalVars.root.set(createBundoAppRoot)
 	GlobalVars.templatesDir.set(node_path.join(createBundoAppRoot, "templates"))
 	GlobalVars.platform.set(platform)
 	GlobalVars.packageManager.set(packageManager)
 
-	console.log("Creating project…")
 	initTemplate()
 
-	console.log("\x1b[32mProject has been created successfully.\x1b[0m")
+	console.log("\x1b[1;32m✔ Project has been created successfully.\x1b[0m")
 
 	if(packageManager == "bun" || packageManager == "pnpm") {
 
 		console.log(`
 Getting Started:
 
-1. (Optional) Rename the "macos-app" and the "windows-app" folder in the /apps with your desired name
+1. (Optional) Rename the "macos-app" folder in the /apps with your desired name
 
-2. Provide your app name in the /apps/*/bundo.config.mjs
+2. Run \`\x1b[1;36m${packageManager} install\x1b[0m\` to install all the JavaScript dependencies
 
-3. Run \`${packageManager} install\` to install all the JavaScript dependencies
+3. Go to /apps/*/ folder
 
-4. Go to /apps/*/ directory
+4. Provide your app name in the bundo.config.mjs file
 
-5. Run \`${packageManager} run appgen\` to generate native project
+5. Run \`\x1b[1;36m${packageManager} run appgen\x1b[0m\` to generate native project
 
-6. Run the Metro server \`${packageManager} run start\`
+6. Run the Metro server \`\x1b[1;36m${packageManager} run start\x1b[0m\`
 
 7. Voila! Run your app with Xcode
 
    or you can run it with
-   \`${packageManager} run macos -- --scheme HelloWorld\` command.
+   \`\x1b[1;36m${packageManager} run macos -- --scheme HelloWorld\x1b[0m\` command.
    (The target name is the .xcworkspace folder name without the .xcworkspace in the /macos directory)
 `)
 
@@ -125,18 +128,18 @@ Getting Started:
 		console.log(`
 Getting Started:
 
-1. Run \`${packageManager} install${packageManager == "npm" ? " --force" : ""}\` to install all the JavaScript dependencies
+1. Run \`\x1b[1;36m${packageManager} install${packageManager == "npm" ? " --force" : ""}\x1b[0m\` to install all the JavaScript dependencies
 
-2. Provide your app name in the bundo.config.mjs
+2. Provide your app name in the bundo.config.mjs file
 
-3. Run \`${packageManager} run appgen\` to generate native project
+3. Run \`\x1b[1;36m${packageManager} run appgen\x1b[0m\` to generate native project
 
-4. Run the Metro server \`${packageManager} run start\`
+4. Run the Metro server \`\x1b[1;36m${packageManager} run start\x1b[0m\`
 
 5. Voila! Run your app with Xcode
 
    or you can run it with
-   \`${packageManager} run macos -- --scheme HelloWorld\`.
+   \`\x1b[1;36m${packageManager} run macos -- --scheme HelloWorld\x1b[0m\`.
    (The target name is the .xcworkspace folder name without the .xcworkspace in the /macos directory)
 `)
 
