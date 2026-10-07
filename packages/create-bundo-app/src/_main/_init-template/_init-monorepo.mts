@@ -147,8 +147,8 @@ export async function initMonorepo() {
 			)
 
 			// change these package catalog version in the package.json
-			packageJson.workspaces.catalog["bundo-window"] = bundoWindowVersion
-			packageJson.workspaces.catalog["bundo.rn"] = bundoRnVersion
+			packageJson.workspaces.catalog["bundo-window"] = `~${bundoWindowVersion}`
+			packageJson.workspaces.catalog["bundo.rn"] = `~${bundoRnVersion}`
 		} else {
 			// PNPM
 
