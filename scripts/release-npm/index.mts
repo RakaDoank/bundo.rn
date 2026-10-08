@@ -1,14 +1,16 @@
 #!/usr/bin/env bun
 
 import * as node_childProcess from "node:child_process"
-import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
 import SemverPrerelease from "semver/functions/prerelease.js"
-import SemverValid from "semver/functions/valid.js"
 
 import yargs from "yargs"
 import * as YargsHelper from "yargs/helpers"
+
+import {
+	getPackagesFromGitTagRelease,
+} from "./_get-packages-from-git-tag-release.mts"
 
 import {
 	packPackage,
@@ -33,124 +35,47 @@ const
 			})
 			.parseSync()
 
-if(argv.tag.startsWith("v")) {
-	// bundo.rn
-	// Bundle and publish all packages
 
-	const packages = [
-		"bundo-appgen", // bundo-appgen has to be the first package
-		"bundo.rn",
-		"bundo-window",
-	]
+// It is intentionally O(2) with an internal for-loop in `getPackagesFromGitTagRelease` and below for-loop.
+// We have to check all the packages semver validation before to publish all the packages.
+const packages = getPackagesFromGitTagRelease(
+	argv.tag,
+	{
+		rootDir,
+	},
+)
 
-	for(const pkg of packages) {
-		const
-			packageDir =
-				node_path.join(rootDir, "packages", pkg),
+for(const pkg of packages) {
+	// build and create the tarball file
 
-			packageJson =
-				JSON.parse(
-					node_fs.readFileSync(
-						node_path.join(packageDir, "package.json"),
-						"utf8",
-					),
-				) as typeof import("../../package.json") // just for the schema/definition
-
-		// check if the version from the tag is same from the packageJson.version
-		if(`v${packageJson.version}` !== argv.tag) {
-			throw new Error(`Cannot publish ${pkg} v${packageJson.version}, while using GIT tag ${argv.tag}.`)
-		}
-
-		// build and create the tarball file
-		node_childProcess.execSync(
-			packageJson.name == "bundo.rn"
-				? "bun run build --skip-build-bundo-appgen"
-				: "bun run build",
-			{
-				cwd: packageDir,
-				stdio: "inherit",
-			},
-		)
-
-		const tarballFilename = packPackage({
-			rootDir,
-			packageName: pkg,
-			packageVersion: packageJson.version,
-		})
-
-		let publishCommand =
-			"bunx npm publish"
-				+ ` ./${tarballFilename}`
-				+ " --access public"
-
-		const prereleaseTag = SemverPrerelease(argv.tag)
-		if(typeof prereleaseTag?.[0] == "string") {
-			publishCommand += ` --tag ${prereleaseTag[0]}`
-		}
-
-		node_childProcess.execSync(
-			publishCommand,
-			{
-				cwd: packageDir,
-				stdio: "inherit",
-			},
-		)
-	}
-
-} else {
-
-	const matchedTag = argv.tag.match(/(.*)@(.*)/)
 	if(
-		!matchedTag?.[1] ||
-		!matchedTag?.[2] ||
-		!SemverValid(matchedTag[2])
+		pkg.name == "bundo.rn" &&
+		packages.length > 1
 	) {
-		throw new Error("Cannot extract the package name and the version from the tag. The tag format must be \"the-package-name@1.2.3\".")
+		// bundo.rn needs "bundo-appgen" has to be built first,
+		// but if the packages.length more than one or tag starts with "v",
+		// we can skip the "bundo-appgen" build.
+		node_childProcess.execSync(
+			"bun run build --skip-build-bundo-appgen",
+			{
+				cwd: pkg.dirname,
+				stdio: "inherit",
+			},
+		)
+	} else {
+		node_childProcess.execSync(
+			"bun run build",
+			{
+				cwd: pkg.dirname,
+				stdio: "inherit",
+			},
+		)
 	}
-
-	const
-		packageName =
-			matchedTag[1],
-
-		/**
-		 * The semver without the leading "v"
-		 * @example "0.0.1-beta.4"
-		 */
-		version =
-			matchedTag[2],
-
-		packageDir =
-			node_path.join(rootDir, "packages", packageName),
-
-		packageJson =
-			JSON.parse(
-				node_fs.readFileSync(
-					node_path.join(packageDir, "package.json"),
-					"utf8",
-				),
-			) as typeof import("../../package.json") // just for the schema/definition
-
-	if(!node_fs.existsSync(packageDir)) {
-		throw new Error(`${packageName} was not found in the packages.`)
-	}
-
-	if(packageJson.version !== version) {
-		throw new Error(`Cannot publish ${packageName}@${packageJson.version}, while using GIT tag ${argv.tag}.`)
-	}
-
-	// Bob
-	node_childProcess.execSync(
-		"bun run build",
-		{
-			cwd: packageDir,
-			stdio: "inherit",
-		},
-	)
 
 	const tarballFilename = packPackage({
 		rootDir,
-		packageName,
-		packageVersion: packageJson.version,
+		packageName: pkg.name,
+		packageVersion: pkg.version,
 	})
 
 	let publishCommand =
@@ -158,7 +83,7 @@ if(argv.tag.startsWith("v")) {
 			+ ` ./${tarballFilename}`
 			+ " --access public"
 
-	const prereleaseTag = SemverPrerelease(version)
+	const prereleaseTag = SemverPrerelease(pkg.version)
 	if(typeof prereleaseTag?.[0] == "string") {
 		publishCommand += ` --tag ${prereleaseTag[0]}`
 	}
@@ -166,9 +91,8 @@ if(argv.tag.startsWith("v")) {
 	node_childProcess.execSync(
 		publishCommand,
 		{
-			cwd: packageDir,
+			cwd: pkg.dirname,
 			stdio: "inherit",
 		},
 	)
-
 }
