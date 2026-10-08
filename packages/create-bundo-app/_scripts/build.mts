@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import * as node_path from "node:path"
 
 const

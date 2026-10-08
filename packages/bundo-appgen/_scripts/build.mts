@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import * as node_childProcess from "node:child_process"
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
