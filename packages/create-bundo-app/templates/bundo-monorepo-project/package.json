@@ -25,7 +25,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.1.1",
     "@eslint/js": "^10.0.1",
-    "@react-native/eslint-config": "0.85.3",
+    "@react-native/eslint-config": "0.83.10",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/bun": "^1",
     "@types/node": "^24",
@@ -38,6 +38,17 @@
     "globals": "^17.13.0",
     "typescript": "6.0.3",
     "typescript-eslint": "^8.71.1"
+  },
+  "overrides": {
+    "@react-native/eslint-config": {
+      "eslint": "^10"
+    },
+    "eslint-plugin-react": {
+      "eslint": "^10"
+    },
+    "eslint-plugin-react-native": {
+      "eslint": "^10"
+    }
   },
   "engines": {
     "bun": "^1",
