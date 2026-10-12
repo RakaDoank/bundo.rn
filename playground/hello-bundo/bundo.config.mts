@@ -62,6 +62,7 @@ export default {
 
 		resources: [
 			"../../node_modules/@audira/carbon-react-native/assets/fonts",
+			"./assets/julia-solonina-unsplash.jpg",
 		],
 
 		infoPlist: {
