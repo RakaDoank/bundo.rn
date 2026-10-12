@@ -6,6 +6,10 @@ import type {
 } from "../../../../../index.mts"
 
 import {
+	GlobalVars,
+} from "../../../../_global-vars/index.mts"
+
+import {
 	ConfigHelpers,
 } from "../../../_helpers/index.mts"
 
@@ -46,6 +50,22 @@ export function createAssetCatalogs(
 		// remove the Assets.xcassets directory including its files if any.
 		if(node_fs.existsSync(xcassetsPath)) {
 			node_fs.rmSync(
+				xcassetsPath,
+				{
+					recursive: true,
+					force: true,
+				},
+			)
+
+			// restore the Contents.json inside of the Assets.xcassets
+			node_fs.cpSync(
+				node_path.join(
+					GlobalVars.appgenRoot.get(),
+					"template",
+					metadata.platform,
+					"HelloWorld",
+					"Assets.xcassets",
+				),
 				xcassetsPath,
 				{
 					recursive: true,
