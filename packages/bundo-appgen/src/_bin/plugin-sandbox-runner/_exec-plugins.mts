@@ -66,6 +66,8 @@ export async function execPlugins({
 			return mod.default
 		})
 
+		console.log(`Executing plugin: ${plugin.name}`)
+
 		try {
 			await pluginMainFn({
 

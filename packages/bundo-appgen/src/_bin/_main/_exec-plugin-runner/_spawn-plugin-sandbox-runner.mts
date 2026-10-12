@@ -118,6 +118,11 @@ export async function spawnPluginSandboxRunner(
 			}
 		})
 
+		pluginRunner.stdout?.on("data", (data: ArrayBuffer) => {
+			const textDecoder = new TextDecoder("utf-8")
+			console.log(textDecoder.decode(data))
+		})
+
 		pluginRunner.on("exit", code => {
 			if(code == 0) {
 				if(message) {
