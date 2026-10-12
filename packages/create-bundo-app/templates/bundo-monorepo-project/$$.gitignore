@@ -11,3 +11,6 @@ yarn-error.log
 .turbo/
 
 *.tsbuildinfo
+
+# bundo.rn cache directory
+.bundo.rn/
