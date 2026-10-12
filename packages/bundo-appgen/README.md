@@ -15,8 +15,9 @@ Generate native app project for React Native app host easily with a single JavaS
 ## Requirements
 
 - Node.js v22 or latest
+  - (Optional) [Bun](https://github.com/oven-sh/bun) – For fast JavaScript package manager and development
 - **macOS**
-  - [XcodeGen](https://github.com/yonaskolb/xcodegen) latest version for macOS .xcodeproj generator. You can install XcodeGen with Homebrew
+  - [XcodeGen](https://github.com/yonaskolb/xcodegen) latest version for macOS .xcodeproj generator. You can install [XcodeGen with Homebrew](https://formulae.brew.sh/formula/xcodegen#default)
   - Ruby v3 or latest
   - [CocoaPods](https://cocoapods.org) dependency manager
 - (Optional) [tsx](https://github.com/privatenumber/tsx) if you want to use TypeScript configuration for `bundo-appgen`
@@ -249,3 +250,5 @@ A plugin can still modify the templated files, such as `AppDelegate.swift` file 
 We create a module that what we called "plugin runner". From the `bundo-appgen` command, it will spawn another Node.js child process with restricted permission to run the plugin runner. The plugin runner will invoke all the plugins main function provided with a JavaScript object (context) argument given. When all the plugin invocation have finished, we send the result to the main process through **Inter Process Communication**, and then, the main process will be responsible to do the actual writing to the template files.
 
 We choose this model because we choose the Zero Trust approach. We do not want a plugin performs a malicious action in your machine with reading and writing to any directories (file system), networking, and spawning a child process.
+
+Currently, this feature is supported only in Node.js. We may support it for [Bun](https://github.com/over-sh/bun) until the permission model is supported. See [Bun #6617 issue](https://github.com/oven-sh/bun/issues/6617). You can still use [Bun](https://github.com/oven-sh/bun) for local app development.
