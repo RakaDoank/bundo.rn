@@ -9,5 +9,5 @@ export type AssetCatalogsNamespaced =
 		 * Stated by Xcode
 		 * "The app icon set must be a top level object in the asset."
 		 */
-		[Namespace in string]?: Omit<AssetCatalogs | AssetCatalogsNamespaced, "appiconsets">
+		[Namespace: Exclude<string, keyof AssetCatalogs>]: Omit<AssetCatalogs, "appiconsets"> | AssetCatalogsNamespaced
 	}

@@ -91,7 +91,7 @@ export interface Data {
 	 * 
 	 * For example, "../node_modules/foo-bar-module/xyz/abc" will copy the "abc" including its files if it is directory. Your app will has "abc" under bundle resources directory, e.g. "/Applications/Hello World.app/Contents/Resources/abc".
 	 * 
-	 * For another real example, you can copy your font files in the bundle resources, and use in your React Native macOS app.
+	 * For another real example, you can copy your font files to the bundle resources, and use it in your React Native macOS app.
 	 * 
 	 * ```ts
 	 * import type { Config } from "bundo.rn/appgen"
