@@ -1,5 +1,6 @@
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
+import * as node_util from "node:util"
 
 import {
 	GlobalVars,
@@ -53,16 +54,30 @@ export function initApple(
 			node_path.join(GlobalVars.appgenRoot.get(), "template", platform),
 
 		projectName =
-			ConfigHelpers.getProjectName(config, platform)! // config object is already validated
+			ConfigHelpers.getProjectName(config, platform)!, // config object is already validated
 
-	if(!node_fs.existsSync(nativeProjectDirectory)) {
+		nativeTargetProjectDirectory =
+			node_path.join(nativeProjectDirectory, projectName),
+
+		projectNameHasChanged =
+			!node_fs.existsSync(nativeTargetProjectDirectory)
+
+	if(
+		!node_fs.existsSync(nativeProjectDirectory) ||
+		projectNameHasChanged
+	) {
+		if(projectNameHasChanged) {
+			console.log(node_util.styleText("yellow", "Rewriting the native project due to a project name change"))
+			node_fs.rmSync(nativeProjectDirectory, { recursive: true, force: true })
+		}
+
 		// TODO : cache strategy
 		// copy the template directory to the user project directory
 		node_fs.cpSync(templateDir, nativeProjectDirectory, { recursive: true })
 
 		node_fs.renameSync(
 			node_path.join(nativeProjectDirectory, "HelloWorld"),
-			node_path.join(nativeProjectDirectory, projectName),
+			nativeTargetProjectDirectory,
 		)
 	}
 
