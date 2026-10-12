@@ -22,8 +22,6 @@ Generate native app project for React Native app host easily with a single JavaS
   - [CocoaPods](https://cocoapods.org) dependency manager
 - (Optional) [tsx](https://github.com/privatenumber/tsx) if you want to use TypeScript configuration for `bundo-appgen`
 
-Technically, you can use [Bun](https://github.com/oven-sh/bun), but `bundo-appgen` is depending on [Node.js Permission Model](https://nodejs.org/api/permissions.html) for `bundo-appgen` plugins. We may support for [Bun](https://github.com/over-sh/bun) fully until the permission model is supported. See [Bun #6617 issue](https://github.com/oven-sh/bun/issues/6617). You can still use [Bun](https://github.com/oven-sh/bun) for local app development.
-
 ## Installation
 
 Install `bundo-appgen` in your project
