@@ -1,12 +1,17 @@
 import * as node_fs from "node:fs"
 import * as node_path from "node:path"
 
-import BundoWindowPackageJson from "../../../../bundo-window/package.json" with { type: "json" }
-import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
-
 import {
 	GlobalVars,
 } from "../_global-vars/index.mts"
+
+import {
+	getBundoRnVersion,
+} from "./_get-bundo-rn-version.mts"
+
+import {
+	getBundoWindowVersion,
+} from "./_get-bundo-window-version.mts"
 
 export async function initApp() {
 
@@ -406,52 +411,4 @@ async function resolveDependenciesSemverAsSinglePackage(
 	}
 
 	return dependencies
-}
-
-let cacheBundoWindowVersion = ""
-async function getBundoWindowVersion(): Promise<string> {
-	if(cacheBundoWindowVersion) {
-		return cacheBundoWindowVersion
-	}
-
-	const ver = await fetch("https://registry.npmjs.org/bundo-window/latest")
-		.then(async res => {
-			const json = await res.json() as {
-				version: string,
-			}
-			if(json && typeof json === "object" && typeof json?.version === "string") {
-				return json.version
-			}
-			throw new Error()
-		})
-		.catch(() => {
-			return BundoWindowPackageJson.version // fallback
-		})
-
-	cacheBundoWindowVersion = ver
-	return ver
-}
-
-let cacheBundoRnVersion = ""
-async function getBundoRnVersion(): Promise<string> {
-	if(cacheBundoRnVersion) {
-		return cacheBundoRnVersion
-	}
-
-	const ver = await fetch("https://registry.npmjs.org/bundo.rn/latest")
-		.then(async res => {
-			const json = await res.json() as {
-				version: string,
-			}
-			if(json && typeof json === "object" && typeof json?.version === "string") {
-				return json.version
-			}
-			throw new Error()
-		})
-		.catch(() => {
-			return BundoRnPackageJson.version // fallback
-		})
-
-	cacheBundoRnVersion = ver
-	return ver
 }

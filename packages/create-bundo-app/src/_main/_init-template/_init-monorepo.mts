@@ -3,12 +3,17 @@ import * as node_path from "node:path"
 
 import * as Yaml from "yaml"
 
-import BundoWindowPackageJson from "../../../../bundo-window/package.json" with { type: "json" }
-import BundoRnPackageJson from "../../../../bundo.rn/package.json" with { type: "json" }
-
 import {
 	GlobalVars,
 } from "../_global-vars/index.mts"
+
+import {
+	getBundoRnVersion,
+} from "./_get-bundo-rn-version.mts"
+
+import {
+	getBundoWindowVersion,
+} from "./_get-bundo-window-version.mts"
 
 export async function initMonorepo() {
 
@@ -136,39 +141,14 @@ export async function initMonorepo() {
 					),
 				) as typeof import("../../../templates/bundo-monorepo-project/package.json"),
 
-			bundoWindowVersion =
-				await fetch(
-					"https://registry.npmjs.org/bundo-window/latest",
-				)
-					.then(async res => {
-						const json = await res.json() as {
-							version: string,
-						}
-						if(json && typeof json === "object" && typeof json?.version === "string") {
-							return json.version
-						}
-						throw new Error()
-					})
-					.catch(() => {
-						return BundoWindowPackageJson.version
-					}),
-
-			bundoRnVersion =
-				await fetch(
-					"https://registry.npmjs.org/bundo.rn/latest",
-				)
-					.then(async res => {
-						const json = await res.json() as {
-							version: string,
-						}
-						if(json && typeof json === "object" && typeof json?.version === "string") {
-							return json.version
-						}
-						throw new Error()
-					})
-					.catch(() => {
-						return BundoRnPackageJson.version
-					})
+			[
+				bundoRnVersion,
+				bundoWindowVersion,
+			] =
+				await Promise.all([
+					getBundoRnVersion(),
+					getBundoWindowVersion(),
+				])
 
 		if(packageManager == "bun") {
 			// Bun
