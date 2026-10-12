@@ -1,8 +1,9 @@
-export type InfoPlistValue =
+export type PlistValue =
 	| boolean
 	| string
 	| string[]
 	| DictionaryValue
+	| DictionaryValue[]
 
 type DictionaryValue = {
 	[Key in string]:
@@ -10,7 +11,7 @@ type DictionaryValue = {
 		| string
 		| string[]
 		| DictionaryValue
-		| {
-			[Key2 in string]: DictionaryValue
-		}[]
+		// | {
+		// 	[Key2 in string]: DictionaryValue
+		// }[]
 }

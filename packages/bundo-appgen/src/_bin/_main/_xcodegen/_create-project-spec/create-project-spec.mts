@@ -61,6 +61,19 @@ export function createProjectSpec(
 		throw new Error(`${platform} configuration was not found.`)
 	}
 
+	const projectName = ConfigHelpers.getProjectName(config, platform)! // already validated
+
+	{
+		// remove the .entitlements file if any and rewrite if the entitlements properties is given.
+		// We need this because XcodeGen doesn't remove previous properties.
+
+		const entitlementsFilePath = node_path.join(nativeProjectDir, projectName, `${projectName}.entitlements`)
+
+		if(node_fs.existsSync(entitlementsFilePath)) {
+			node_fs.rmSync(entitlementsFilePath)
+		}
+	}
+
 	const
 		requireFromNativeDirectory =
 			node_module.createRequire(nativeProjectDir),

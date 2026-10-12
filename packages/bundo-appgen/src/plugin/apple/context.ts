@@ -4,41 +4,7 @@ import type {
 	Files,
 } from "./files"
 
-// import type {
-// 	PodSpecSourceFromCocoapods,
-// } from "./pod-spec-source-from-cocoapods"
-
-// import type {
-// 	PodSpecSourceFromGit,
-// } from "./pod-spec-source-from-git"
-
-// import type {
-// 	PodSpecSourceFromLocal,
-// } from "./pod-spec-source-from-local"
-
 export interface Context {
-
-	// /**
-	//  * @deprecated
-	//  * It will be replaced by Swift Package Manager in the future.
-	//  * We need to wait until React Native and React Native macOS support Swift Package Manager completely.
-	//  * 
-	//  * @see https://guides.cocoapods.org/using/the-podfile.html
-	//  */
-	// readonly Podfile: {
-	// 	/**
-	// 	 * Add a Pod for client application.
-	// 	 * 
-	// 	 * The Pod array is initially an empty array, but incrementally added and overwritten by other plugins.
-	// 	 */
-	// 	readonly pod: {
-	// 		name: string,
-	// 		source:
-	// 			| PodSpecSourceFromCocoapods
-	// 			| PodSpecSourceFromGit
-	// 			| PodSpecSourceFromLocal
-	// 	}[],
-	// },
 
 	/**
 	 * Read and modify the templated files in raw source text.
@@ -63,6 +29,6 @@ export interface Context {
 	 * 
 	 * The Info Plist result from plugin cannot overwrite an Info Plist item of client app with the same key.
 	 */
-	readonly infoPlist: Config.Apple.InfoPlist,
+	readonly infoPlist: Config.Apple.Plist,
 
 }

@@ -4,14 +4,20 @@ import {
 
 import {
 	podfile,
-} from "./_podfile.mts"
+} from "./_podfile/index.mts"
+
+import {
+	privacyManifest,
+} from "./_privacy-manifest.mts"
 
 export function modFiles(
-	platform: "macos" | "ios",
+	platform: "macos",
 ) {
 
 	appDelegateSwift(platform)
 
 	podfile(platform)
+
+	privacyManifest(platform)
 
 }

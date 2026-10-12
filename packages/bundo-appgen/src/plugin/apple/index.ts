@@ -1,5 +1,2 @@
 export type * from "./context"
 export type * from "./files"
-export type * from "./pod-spec-source-from-cocoapods"
-export type * from "./pod-spec-source-from-git"
-export type * from "./pod-spec-source-from-local"

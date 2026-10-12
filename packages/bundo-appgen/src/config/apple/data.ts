@@ -7,10 +7,22 @@ import type {
 } from "./asset-catalogs-namespaced"
 
 import type {
-	InfoPlist,
-} from "./info-plist"
+	Plist,
+} from "./plist"
+
+import type * as Podfile from "./podfile"
 
 export interface Data {
+
+	/**
+	 * @deprecated
+	 * React Native will move away from CocoaPods, and use Swift Package Manager.
+	 * Consider this deprecation as a warning, because Swift Package Manager in React Native is still experimental.
+	 * You can still use this until Swift Package Manager is supported in React Native completely.
+	 */
+	Podfile?: {
+		dependencies?: Podfile.PodDependency[],
+	},
 
 	/**
 	 * Use one name of `appiconsets` in Asset Catalogs as the app icon.
@@ -35,11 +47,17 @@ export interface Data {
 	bundleIdentifier: string,
 
 	/**
+	 * Key-value pairs that grant an executable permission to use a service or technology.
+	 * @see https://developer.apple.com/documentation/bundleresources/entitlements
+	 */
+	entitlements?: Plist,
+
+	/**
 	 * Customize the information property list values for your app.
 	 * 
 	 * For human readable information property list, you can localize the information property through string catalog. See {@link stringCatalogs|`stringCatalogs`}
 	 */
-	infoPlist?: InfoPlist,
+	infoPlist?: Plist,
 
 	/**
 	 * Provide array of [language identifier](https://developer.apple.com/documentation/xcode/choosing-localization-regions-and-scripts), made up of a [2-letter language code](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) of your desired language, with an optional region code (for example, en-US or en-GB).
@@ -61,6 +79,11 @@ export interface Data {
 	 * This name will be used also for project name in Xcode with removed spaces and special characters.
 	 */
 	name?: string,
+
+	/**
+	 * Describe the data your app or third-party SDK collects and the required reasons APIs it uses.
+	 */
+	privacyManifest?: Plist,
 
 	/**
 	 * Add files to the native bundle resources directory, e.g. "/Applications/Hello World.app/Contents/Resources".
