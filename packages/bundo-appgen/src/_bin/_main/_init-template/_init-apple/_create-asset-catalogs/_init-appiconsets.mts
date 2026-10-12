@@ -9,32 +9,39 @@ import {
 	GlobalVars,
 } from "../../../../_global-vars/index.mts"
 
+import {
+	getXcassetsPath,
+} from "./_get-xcassets-path.mts"
+
 import * as MetadataCheck from "./_metadata-check/index.mts"
 
 /**
- * Similar as the _init-imagesets.mts
+ * This function is similar as the _init-imagesets.mts. The main difference is "appiconsets" does not has a namespace.
+ * 
+ * @returns
+ * Returns an array of string that represents as the catalog name that has been created,
+ * e.g. `["MyImage", "AnotherImage"]`.
  */
 export function initAppiconsets(
 	appiconsets: Config.Apple.AssetCatalogs["appiconsets"],
 	metadata: {
 		bundleIdentifier: string,
-		projectName: string,
-		platform: "ios" | "macos",
+		platform: "macos",
 	},
-) {
+): string[] | undefined {
 
 	if(!appiconsets?.length) {
 		return
 	}
 
-	const projectDirectory = node_path.dirname(GlobalVars.configFilePath.get())
+	const
+		createdCatalogs: string[] =
+			[],
 
-	const targetDirectory = node_path.join(
-		projectDirectory,
-		"macos",
-		metadata.projectName,
-		"Assets.xcassets",
-	)
+		projectDirectory =
+			node_path.dirname(GlobalVars.configFilePath.get())
+
+	const xcassetsPath = getXcassetsPath(metadata.platform)
 
 	let appiconset_index = -1
 	for(const appiconset of appiconsets) {
@@ -46,7 +53,7 @@ export function initAppiconsets(
 
 		// +++++ create <name>.appiconset directory inside of the target directory
 		const _appiconset_directory = node_path.join(
-			targetDirectory,
+			xcassetsPath,
 			`${appiconset.name}.appiconset`,
 		)
 		if(!node_fs.existsSync(_appiconset_directory)) {
@@ -180,7 +187,13 @@ export function initAppiconsets(
 			),
 			"utf8",
 		)
+
+		createdCatalogs.push(appiconset.name)
 	}
+
+	// BUG : false positive
+	// eslint-disable-next-line consistent-return
+	return createdCatalogs
 
 }
 

@@ -9,37 +9,46 @@ import {
 	GlobalVars,
 } from "../../../../_global-vars/index.mts"
 
+import {
+	getXcassetsPath,
+} from "./_get-xcassets-path.mts"
+
 import * as MetadataCheck from "./_metadata-check/index.mts"
 
+/**
+ * @returns
+ * Returns an array of string that represents as the catalog name that has been created
+ * including its namespace, e.g. `["Foo/Bar", "MyImage", "AnotherImage"]`.
+ */
 export function initImagesets(
 	imagesets: Config.Apple.AssetCatalogs["imagesets"],
 	metadata: {
 		bundleIdentifier: string,
 		namespace?: string,
-		projectName: string,
+		platform: "macos",
 	},
-) {
+): string[] | undefined {
 
 	if(!imagesets?.length) {
 		return
 	}
 
-	const projectDirectory = node_path.dirname(GlobalVars.configFilePath.get())
+	const
+		createdCatalogs: string[] =
+			[],
 
-	let targetDirectory = node_path.join(
-		projectDirectory,
-		"macos",
-		metadata.projectName,
-		"Assets.xcassets",
-	)
+		projectDirectory =
+			node_path.dirname(GlobalVars.configFilePath.get())
+
+	let xcassetsPath = getXcassetsPath(metadata.platform)
 
 	if(metadata.namespace) {
 		// append a namespace directory after Assets.xcassets
-		targetDirectory = node_path.join(targetDirectory, metadata.namespace)
+		xcassetsPath = node_path.join(xcassetsPath, metadata.namespace)
 
 		// Create a namespace directory inside of "Assets.xcassets"
 		node_fs.mkdirSync(
-			targetDirectory,
+			xcassetsPath,
 			{
 				recursive: true,
 			},
@@ -47,7 +56,7 @@ export function initImagesets(
 
 		// create Contents.json in the namespace directory
 		node_fs.writeFileSync(
-			node_path.join(targetDirectory, "Contents.json"),
+			node_path.join(xcassetsPath, "Contents.json"),
 			JSON.stringify({
 				info: {
 					version: 1,
@@ -71,7 +80,7 @@ export function initImagesets(
 
 		// +++++ create <name>.imageset directory inside of the target directory
 		const _imageset_directory = node_path.join(
-			targetDirectory,
+			xcassetsPath,
 			`${imageset.name}.imageset`,
 		)
 		if(!node_fs.existsSync(_imageset_directory)) {
@@ -215,7 +224,17 @@ export function initImagesets(
 			),
 			"utf8",
 		)
+
+		if(metadata.namespace) {
+			createdCatalogs.push(`${metadata.namespace}/${imageset.name}`)
+		} else {
+			createdCatalogs.push(imageset.name)
+		}
 	}
+
+	// BUG : false positive
+	// eslint-disable-next-line consistent-return
+	return createdCatalogs
 
 }
 
