@@ -129,26 +129,37 @@ export function createProjectSpec(
 								path: projectName,
 								type: "syncedFolder",
 							},
-							...(resourcesData?.map(resource => {
-								/**
-								 * The path "Resources" is just our group, and also our custom directory,
-								 * not an actual bundle resource directory content of macOS app, e.g. /Applications/HelloWorld.app/Contents/Resources.
-								 * The naming is purely a coincidence.
-								 * 
-								 * We intentionally to copy user files to our directory called "Resources".
-								 * Any user files will be copied to our "Resources" directory.
-								 * 
-								 * See placing content in a bundle
-								 * https://developer.apple.com/documentation/bundleresources/placing-content-in-a-bundle?language=objc
-								 */
+
+							/**
+							 * The path "Resources" is just our group, and also our custom directory,
+							 * not an actual bundle resource directory content of macOS app, e.g. /Applications/HelloWorld.app/Contents/Resources.
+							 * The naming is purely a coincidence.
+							 * 
+							 * We intentionally to copy user files to our directory called "Resources".
+							 * Any user files will be copied to our "Resources" directory.
+							 * 
+							 * See placing content in a bundle
+							 * https://developer.apple.com/documentation/bundleresources/placing-content-in-a-bundle?language=objc
+							 */
+
+							...(resourcesData?.basenameFiles.length ? [{
+								path: "Resources",
+								excludes: resourcesData.subpaths,
+								buildPhase: {
+									copyFiles: {
+										destination: "resources",
+									},
+								},
+							}] : []),
+
+							...(resourcesData?.subpaths?.map(subpath => {
 								return {
 									path: "Resources",
+									excludes: resourcesData.basenameFiles,
 									buildPhase: {
 										copyFiles: {
 											destination: "resources",
-											subpath: resource.isDirectory
-												? resource.basename
-												: undefined,
+											subpath,
 										},
 									},
 								}

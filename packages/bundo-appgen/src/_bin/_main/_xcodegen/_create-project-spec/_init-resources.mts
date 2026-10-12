@@ -9,15 +9,19 @@ import {
 	GlobalVars,
 } from "../../../_global-vars/index.mts"
 
+/**
+ * This function is probably better at inside of ./_bin/_main/_init-template/_init-apple,
+ * but create-project-spec.mts needs the directory name as the "subpath" resource configuration.
+ */
 export function initResources(
 	resources: Config.Apple.Data["resources"],
 	metadata: {
 		platform: "macos" | "ios",
 	},
 ): {
-	basename: string,
-	isDirectory: boolean,
-}[] | null {
+	basenameFiles: string[],
+	subpaths: string[],
+} | null {
 
 	if(!resources?.length) {
 		return null
@@ -36,7 +40,10 @@ export function initResources(
 				"Resources",
 			),
 
-		data: NonNullable<ReturnType<typeof initResources>> =
+		basenameFiles: NonNullable<ReturnType<typeof initResources>>["basenameFiles"] =
+			[],
+
+		subpaths: NonNullable<ReturnType<typeof initResources>>["subpaths"] =
 			[]
 
 	node_fs.rmSync(resourcesDirectory, { recursive: true, force: true })
@@ -70,10 +77,11 @@ export function initResources(
 				},
 			)
 
-			data.push({
-				basename: node_path.basename(path),
-				isDirectory: lstat.isDirectory(),
-			})
+			if(lstat.isDirectory()) {
+				subpaths.push(node_path.basename(path))
+			} else {
+				basenameFiles.push(node_path.basename(path))
+			}
 		}
 	} catch(err) {
 		// remove the resources directory upon error
@@ -81,6 +89,10 @@ export function initResources(
 		throw err
 	}
 
-	return data
+	// return data
+	return {
+		basenameFiles,
+		subpaths,
+	}
 
 }
