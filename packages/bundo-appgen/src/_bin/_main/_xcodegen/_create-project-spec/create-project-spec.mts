@@ -186,6 +186,12 @@ export function createProjectSpec(
 								...appleData.infoPlist,
 							},
 						},
+
+						entitlements: appleData.entitlements ? {
+							path: `${projectName}/${projectName}.entitlements`,
+							properties: appleData.entitlements,
+						} : undefined,
+
 						postBuildScripts: [
 							{
 								name: "Bundle React Native code and images",
