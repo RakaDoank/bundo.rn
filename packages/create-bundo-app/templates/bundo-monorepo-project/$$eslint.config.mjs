@@ -80,42 +80,34 @@ export default EslintConfig.defineConfig([
             {
               "pattern": "react",
               "group": "builtin",
-              "position": "after",
             },
             {
               "pattern": "react-native",
               "group": "builtin",
-              "position": "after",
             },
             {
               "pattern": "react-native-macos",
               "group": "builtin",
-              "position": "after",
             },
             {
               "pattern": "react-native-windows",
               "group": "builtin",
-              "position": "after",
             },
             {
               "pattern": "bundo.rn*",
               "group": "builtin",
-              "position": "after",
             },
             {
-              "pattern": "bundo.rn**/*",
+              "pattern": "bundo-**/*",
               "group": "builtin",
-              "position": "after",
             },
             {
               "pattern": "expo*",
               "group": "builtin",
-              "position": "after",
             },
             {
               "pattern": "expo**/*",
               "group": "builtin",
-              "position": "after",
             },
           ],
           "pathGroupsExcludedImportTypes": [

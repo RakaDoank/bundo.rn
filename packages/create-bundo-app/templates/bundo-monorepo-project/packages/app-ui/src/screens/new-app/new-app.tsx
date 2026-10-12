@@ -5,11 +5,11 @@ import {
   useColorScheme,
 } from "react-native"
 
-import * as BundoWindow from "bundo-window"
-
 import {
   NewAppScreen,
 } from "@react-native/new-app-screen"
+
+import * as BundoWindow from "bundo-window"
 
 import {
   useSafeAreaInsets,
@@ -30,7 +30,7 @@ export function NewApp({
 
     colorScheme =
       useColorScheme()
-  
+
   return (
     <View
       { ...props }
