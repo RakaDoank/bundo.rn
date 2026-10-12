@@ -10,7 +10,7 @@ import {
 } from "../../../_helpers/index.mts"
 
 export function appDelegateSwift(
-	platform: "macos" | "ios",
+	platform: "macos",
 ) {
 
 	const
@@ -18,7 +18,7 @@ export function appDelegateSwift(
 			GlobalVars.appConfig.get(),
 
 		projectName =
-			ConfigHelpers.getProjectName(appConfig, platform),
+			ConfigHelpers.getProjectName(appConfig, platform)!, // already validated
 
 		appName =
 			ConfigHelpers.getName(
@@ -30,10 +30,7 @@ export function appDelegateSwift(
 			node_path.join(
 				node_path.dirname(GlobalVars.configFilePath.get()),
 				platform,
-				ConfigHelpers.getProjectName(
-					GlobalVars.appConfig.get(),
-					platform,
-				)!,
+				projectName,
 				"AppDelegate.swift",
 			)
 

@@ -22,13 +22,23 @@ import {
 } from "./_mod-files/index.mts"
 
 export function initApple(
-	platform: "macos" | "ios",
+	platform: "macos",
 ) {
 	const
-		// config.macos is already checked at bundo-appgen/src/_bin/_main/main.mts
 		config =
 			GlobalVars.appConfig.get(),
 
+		appleData =
+			config[platform]
+
+	// `config.macos` is already checked at bundo-appgen/src/_bin/_main/main.mts
+	// but if somehow if bundo-appgen is supporting other Apple platforms,
+	// we need a correct check in the bundo-appgen/src/_bin/_check-config-validitidy.mts
+	if(!appleData) {
+		throw new Error(`"${platform}" config is empty.`)
+	}
+
+	const
 		projectDirectory =
 			node_path.dirname(GlobalVars.configFilePath.get()),
 
@@ -54,20 +64,15 @@ export function initApple(
 			node_path.join(nativeProjectDirectory, "HelloWorld"),
 			node_path.join(nativeProjectDirectory, projectName),
 		)
-
-		modFiles(platform)
 	}
 
-	// Intentionally asserted as "macos"
-	// TODO : "ios"
-	const appleData = config[platform as "macos"]!
+	modFiles(platform)
 
 	createAssetCatalogs(
 		appleData.assetCatalogs,
 		{
 			bundleIdentifier: appleData.bundleIdentifier,
 			platform,
-			projectName,
 		},
 	)
 

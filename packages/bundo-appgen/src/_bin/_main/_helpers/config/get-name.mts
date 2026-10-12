@@ -8,9 +8,7 @@ import type {
 export function getName(
 	config: Config.Data,
 	platform:
-		| "macos"
-		| "windows"
-		| "ios",
+		| "macos",
 ): string | undefined {
 
 	if(platform == "macos") {

@@ -22,13 +22,21 @@ export function checkConfigValidity(
 
 	const isCrossPlatform = GlobalVars.argv.get().forceCrossPlatform
 
+	// These check here are not correct if we support other platforms, e.g. windows
+	// bundo-appgen is only supporting "macos" currently.
 	if(isCrossPlatform) {
 		checkMacosConfig(config)
-		// TODO windows
+		// we only support "macos" currently.
+		// if we support other Apple platforms e.g. "ios",
+		// we need another if-else check here
 	} else if(process.platform == "darwin") {
+		// we only support "macos" currently.
+		// if we support other Apple platforms e.g. "ios",
+		// we need another if-else check here
 		checkMacosConfig(config)
-	} else if(process.platform == "win32") {
+	} else /* if(process.platform == "win32") */ {
 		// TODO windows
+		throw new Error(`Cannot support appgen for macOS in ${process.platform} platform.`)
 	}
 
 	// check plugin

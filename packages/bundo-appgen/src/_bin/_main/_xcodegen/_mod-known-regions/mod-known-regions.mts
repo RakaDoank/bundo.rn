@@ -10,14 +10,14 @@ import {
 } from "../../_helpers/index.mts"
 
 export function modKnownRegions(
-	platform: "macos" | "ios",
+	platform: "macos",
 ) {
 	const
 		config =
 			GlobalVars.appConfig.get(),
 
 		appleData =
-			config[platform as "macos"] // TODO : ios
+			config[platform as "macos"] // TODO : other Apple platforms
 
 	if(!appleData?.locales?.length) {
 		return

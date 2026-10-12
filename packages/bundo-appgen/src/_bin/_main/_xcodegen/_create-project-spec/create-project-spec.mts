@@ -20,7 +20,7 @@ import {
  * Create `project.json` file in the "&lt;project&gt;/macos" directory.
  */
 export function createProjectSpec(
-	platform: "macos" | "ios",
+	platform: "macos",
 	overrideConfig?: {
 		infoPlist?: Config.Apple.Data["infoPlist"],
 	},
@@ -42,7 +42,7 @@ export function createProjectSpec(
 		config =
 			GlobalVars.appConfig.get()
 
-	// TODO : also check for "ios"
+	// TODO : other Apple platforms
 	if(
 		config.macos?.appicon &&
 		(
@@ -56,7 +56,7 @@ export function createProjectSpec(
 
 	if(
 		(platform == "macos" && !config.macos)
-		// TODO : "ios"
+		// TODO : other Apple platforms
 	) {
 		throw new Error(`${platform} configuration was not found.`)
 	}
@@ -87,18 +87,13 @@ export function createProjectSpec(
 			),
 
 		appleData: Config.Apple.Data =
-			// Intentionally asserted as "macos"
-			// TODO : "ios"
 			{
-				...config[platform as "macos"]!,
+				...config[platform]!,
 				infoPlist: {
 					...overrideConfig?.infoPlist,
-					...config[platform as "macos"]!.infoPlist, // client's infoPlist takes precedence over the plugin
+					...config[platform]!.infoPlist, // client's infoPlist takes precedence over the plugin
 				},
 			},
-
-		projectName =
-			ConfigHelpers.getProjectName(config, platform)!, // already validated
 
 		resourcesData =
 			initResources(
@@ -108,12 +103,10 @@ export function createProjectSpec(
 				},
 			),
 
-		/* eslint-disable @typescript-eslint/no-explicit-any */
-
 		/**
 		 * See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md
 		 */
-		json: Record<string, any> =
+		json: Record<string, unknown> =
 			{
 
 				name: projectName,
@@ -199,8 +192,6 @@ export function createProjectSpec(
 							},
 						],
 
-						scheme: {},
-
 						settings: {
 							ASSETCATALOG_COMPILER_APPICON_NAME: appleData.appicon,
 						},
@@ -235,8 +226,6 @@ export function createProjectSpec(
 				},
 
 			}
-
-	/* eslint-enable @typescript-eslint/no-explicit-any */
 
 	node_fs.writeFileSync(
 		node_path.join(

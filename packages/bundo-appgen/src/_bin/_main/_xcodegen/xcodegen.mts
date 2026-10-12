@@ -14,7 +14,7 @@ import {
 } from "./_mod-known-regions/mod-known-regions.mts"
 
 export function xcodegen(
-	platform: "macos" | "ios",
+	platform: "macos",
 	overrideConfig?: Parameters<typeof createProjectSpec>[1],
 ) {
 	createProjectSpec(platform, overrideConfig)

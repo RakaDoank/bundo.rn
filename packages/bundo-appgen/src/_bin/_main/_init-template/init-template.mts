@@ -12,6 +12,8 @@ import {
 export function initTemplate() {
 	// config object is already checked at ../main.mts
 
+	// The platform target check here is not correct if we are supporting other platforms.
+	// bundo-appgen is only supporting the "macos" at this moment.
 	try {
 		if(process.platform == "darwin") {
 			initApple("macos")

@@ -130,7 +130,7 @@ export async function main() {
 		modPlugin(pluginContextResult)
 	}
 
-	// TODO : "ios"
+	// TODO : other Apple platforms
 	xcodegen(
 		"macos",
 		{
