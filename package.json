@@ -8,7 +8,8 @@
 		"code-check": "npm run type-check && npm run lint",
 		"lint": "eslint",
 		"prepare": "husky",
-		"type-check": "tsc --build"
+		"type-check": "bun check --build",
+		"type-check:ts": "tsc --build"
 	},
 	"workspaces": {
 		"catalog": {
@@ -53,7 +54,7 @@
 		"yaml": "2.9.1"
 	},
 	"engines": {
-		"bun": "^1.4.x",
+		"bun": "^1.4.3",
 		"node": ">=24"
 	}
 }
