@@ -70,7 +70,7 @@ export default config
 
 #### TypeScript Configuration File
 
-You can also use TypeScript config file, but you need [tsx](https://github.com/privatenumber/tsx) installed in your project as development dependency. Create `bundo.config.mts` or `bundo.config.ts` that lives beside of your package.json project
+You can also use TypeScript config file with Bun, or you need [tsx](https://github.com/privatenumber/tsx) installed in your project as development dependency. Create `bundo.config.mts` or `bundo.config.ts` that lives beside of your package.json project
 
 ```ts
 import {
@@ -103,6 +103,11 @@ Now, generate your native app project by running this command
 with Bun
 ```bash
 bunx bundo-appgen
+```
+
+with Bun and TypeScript configuration file
+```bash
+bunx --bun bundo-appgen
 ```
 
 with pnpm
