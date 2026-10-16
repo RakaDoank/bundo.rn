@@ -7,11 +7,11 @@ Manager of your React Native app project for native macOS.
 
 ## Documentation
 
-Documentation is not available yet. We are still on development and research on the core project.
+See [bundo-appgen](https://github.com/RakaDoank/bundo.rn/tree/main/packages/bundo-appgen) package. Meanwhile, complete documentation is not yet available. We are still on development and research phase for the core project.
 
 ## Project Layout
 
-- [package](https://github.com/RakaDoank/bundo.rn/tree/main/packages) - All the bundo.rn source code with its other libraries
+- [packages](https://github.com/RakaDoank/bundo.rn/tree/main/packages) - All the bundo.rn source code with its other libraries
 - [playground](https://github.com/RakaDoank/bundo.rn/tree/main/packages) - A development playground directory where we can try, test, and improve libraries locally
 
 ## Contributing
